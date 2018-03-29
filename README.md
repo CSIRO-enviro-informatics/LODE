@@ -45,6 +45,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 
 ## Complete Steps to Installing & Running LODE <a name="completeStepsToInstallingNRunningLODE"></a>
 The following installation guide is required for running the complete version of LODE. For users seeking the minimal version of LODE, only [Installing Apache Maven](#apacheMaven) will be required.  
+  
 **Note:** *The following steps to installing LODE assumes that you are running a Windows 10 system. However, the installation on other operating systems should be similar.*
 
 ---

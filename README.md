@@ -24,3 +24,17 @@ Try running LODE with the following ontologies:
 **Silvio Peroni**  
 *Creator*  
 <http://www.essepuntato.it>
+
+
+## Running LODE Locally
+* Requirements:
+	* Install Apache HTTP Server (https://httpd.apache.org/).
+		* Edit `httpd.conf` to have the `DocumentRoot` and `<Directory>` to point to the root directory of LODE.
+			* `DocumentRoot "C:\Users\chu101\Desktop\LODE"`
+			* `<Directory "C:\Users\chu101\Desktop\LODE">`
+		* Make sure the `php.ini` file has the `file_uploads` directive set to on.
+			* `file_uploads = On`
+	* Install Apache Maven (https://maven.apache.org/) and configure it to run in the command line.
+		* In the command line `cd` into the root directory of LODE and type `mvn clean jetty:run` to update LODE's dependencies and automatically deploy inside an instance of Tomcat (http://tomcat.apache.org/). 
+
+With both the HTTP Server and Maven's Tomcat server running, open a web browser and go to `localhost/`. Here, you can enter a valid URL to an ontology or upload a file. 

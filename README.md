@@ -19,7 +19,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 	* [Installing PHP as an Apache Module](#installingPHP)
 	* [Installing Apache Maven](#installingApacheMaven)
 * [Running LODE](#runningLODE)
-* [Contacts](#contacts)
+* [Contact](#contact)
 
 ---
 
@@ -44,7 +44,8 @@ This repository is a Tomcat server application that can be used to create HTML d
 ---
 
 ## Complete Steps to Installing & Running LODE <a name="completeStepsToInstallingNRunningLODE"></a>
-**NOTE:** *The following steps to installing LODE assumes that you are running a Windows 10 system. However, the installation on other operating systems should be similar.*
+The following installation guide is required for running the complete version of LODE. For users seeking the minimal version of LODE, only [Installing Apache Maven](#apacheMaven) will be required.  
+**Note:** *The following steps to installing LODE assumes that you are running a Windows 10 system. However, the installation on other operating systems should be similar.*
 
 ---
 
@@ -148,7 +149,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 	* Create another **User variable** named `MAVEN_HOME`. Give it the value of your Apache Maven folder path like above. 
 	* Under **System variables**, find the `Path` variable and click `Edit.` Create a new path to your `apache-maven\bin` folder.
 		* Example: `C:\apache-maven-3.5.3-bin\apache-maven-3.5.3\bin`
-5. Check that Apache Maven was instaled correctly.
+5. Check that Apache Maven was installed correctly.
 	* To do this, open `Command Prompt` and type `mvn -version`. It should produce something similar to this.
 	```
 	C:\Users\Edmond-PC>mvn -version
@@ -171,7 +172,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 
 ---
 
-## Contacts <a name="contacts"></a>
+## Contact <a name="contact"></a>
 **Silvio Peroni**  
 *Creator*  
 <http://www.essepuntato.it>

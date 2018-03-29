@@ -168,7 +168,7 @@ The following installation guide is required for running the complete version of
 ### Running LODE <a name="runningLODE"></a>
 1. Run `Apache HTTP Server`.
 2. Open `Command Prompt` and change directory to the root directory of LODE.
-3. On the command line, type `mvn clean jetty:run`. The first time running this command will download all the dependencies for LODE Make sure to accept the `Windows Security Alert` prompt . Once finished, Maven will automatically deploy an instance of LODE in Tomcat.
+3. On the command line, type `mvn clean jetty:run`. The first time running this command will download all of the dependencies for LODE. Make sure to accept the `Windows Security Alert` prompt. Once finished, Maven will automatically deploy an instance of LODE in Tomcat.
 4. In your favourite browser, navigate to `http://localhost/index.html` to start the LODE service.
 
 ---

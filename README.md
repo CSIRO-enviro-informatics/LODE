@@ -12,6 +12,8 @@ This repository is a Tomcat server application that can be used to create HTML d
 
 ## Table Of Contents:
 * [Example Usage](#exampleUsage)
+	* [Minimal LODE](#minimalLODE)
+	* [Complete LODE (user-interface)](#completeLODE)
 * [Complete Steps to Installing & Running LODE](#completeStepsToInstallingNRunningLODE)
 	* [Installing Apache HTTP Server](#installingApacheHTTPServer)
 	* [Installing PHP as an Apache Module](#installingPHP)
@@ -22,21 +24,22 @@ This repository is a Tomcat server application that can be used to create HTML d
 ---
 
 ## Example Usage: <a name="exampleUsage"></a>
-
+### Minimal LODE <a name="minimalLODE"></a>
 1. Launch application:
 
-	`mvn clean jetty:run`
+	* `mvn clean jetty:run`
 
-2. Test
+2. Open a web browser and call the LODE service.
+	* **DOLCE ontology**
+		* `http://localhost:8080/lode/extract?url=http://www.loa.istc.cnr.it/ontologies/DOLCE-Lite.owl`  
 
-Try running LODE with the following ontologies:
-
-* **DOLCE ontology**
-	* `http://localhost:8080/lode/extract?url=http://www.loa.istc.cnr.it/ontologies/DOLCE-Lite.owl`
-* **PROMS ontology**
-	* contained here in the file [proms.ttl](proms.ttl)
-	* it is a very tiny ontology visualised online using LODE at <http://promsns.org/def/proms/>.
-	* You can run try using a local instance of LODE to generate HTML for the local copy of PROMS and compare it with the online version made by the PROMS creator
+### Complete LODE (user-interface) <a name="completeLODE"></a>
+1. Run LODE on a HTTP web server.
+	* Visit `http://localhost/index.html` and input a valid URL or upload a file.
+	* **PROMS ontology**
+		* Try uploading [proms.ttl](proms.ttl)
+		* It is a very tiny ontology visualised online using LODE at <http://promsns.org/def/proms/>.
+		* You can run try using a local instance of LODE to generate HTML for the local copy of PROMS and compare it with the online version made by the PROMS creator
 
 ---
 

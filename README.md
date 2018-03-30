@@ -1,6 +1,6 @@
 ---
 
-![alt text][logo]
+![LODE image](https://github.com/CSIRO-enviro-informatics/LODE/blob/master/src/main/webapp/LODE_Image.png)
 
 ---
 

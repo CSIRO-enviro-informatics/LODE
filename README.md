@@ -144,7 +144,7 @@ The following installation guide is required for running the complete version of
 		* Example: `C:\Program Files\Java\jdk-10`
 	* Under **System variables**, find the `Path` variable and click `Edit`. Click `New` and add the path to your `JDK\bin`.
 		* Example: `C:\Program Files\Java\jdk-10\bin`
-3. Download [Apache maven](https://maven.apache.org/download.cgi). Make sure you download the Binary zip file.
+3. Download [Apache Maven](https://maven.apache.org/download.cgi). Make sure you download the Binary zip file.
 	* Example: `apache-maven-3.5.3-bin.zip`
 	* Extract and move the Apache Maven folder to the root of your `Local Disk (C:)` drive.
 4. Once again, open `Advanced system settings` like in **step 2**. 

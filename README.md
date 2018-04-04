@@ -24,6 +24,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 	* [Installing Apache Maven](#installingApacheMaven)
 * [Running LODE](#runningLODE)
 * [Common Issues](#commonIssues)
+* [Diagram of LODE](#diagramOfLODE)
 * [Contact](#contact)
 
 ---
@@ -179,6 +180,11 @@ The following installation guide is required for running the complete version of
 * Make sure the `php.ini` file has the `file_uploads` directive set to on.
 	* `file_uploads = On`
 * Run `cmd` and `ApacheMonitor` as administrator when running Maven to avoid permission issues.
+
+---
+
+## Diagram of LODE <a name="diagramOfLODE"></a>
+<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/LODE%20Diagram.png"/></p>
 
 ---
 

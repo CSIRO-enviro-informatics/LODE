@@ -6,10 +6,11 @@
 
 # Live OWL Documentation Environment (LODE)
 This repository is a Tomcat server application that can be used to create HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies.  
-  
-| Last updated by:		| Date:		|
-| ----------------------|:---------:|
-| Edmond Chuc			|30/03/2018	|
+
+
+| `README.md` updated by:| Date:		|
+| -----------------------|:------------:|
+| Edmond Chuc			 |04/04/2018	|
 
 ---
 
@@ -22,6 +23,7 @@ This repository is a Tomcat server application that can be used to create HTML d
 	* [Installing PHP as an Apache Module](#installingPHP)
 	* [Installing Apache Maven](#installingApacheMaven)
 * [Running LODE](#runningLODE)
+* [Common Issues](#commonIssues)
 * [Contact](#contact)
 
 ---
@@ -126,13 +128,6 @@ The following installation guide is required for running the complete version of
 	* Save and close the text file
 6. Run `ApacheMonitor`.
 	* In your favourite browser, run http://localhost/phpinfo.php. You should see PHP's system information.
-7. Common issues:
-	* Apache HTTP Server VC version is different to PHP VC version.
-	* Run `cmd` as administrator and `cd \apache24\bin`. 
-		* Run `httpd -k start` to see what error you get.
-
-	* Make sure the `php.ini` file has the `file_uploads` directive set to on.
-		* `file_uploads = On`
 
 ---
 
@@ -168,11 +163,21 @@ The following installation guide is required for running the complete version of
 
 ---
 
-### Running LODE <a name="runningLODE"></a>
+## Running LODE <a name="runningLODE"></a>
 1. Run `Apache HTTP Server`.
 2. Open `Command Prompt` and change directory to the root directory of LODE.
 3. On the command line, type `mvn clean jetty:run`. The first time running this command will download all of the dependencies for LODE. Make sure to accept the `Windows Security Alert` prompt. Once finished, Maven will automatically deploy an instance of LODE in Tomcat.
 4. In your favourite browser, navigate to `http://localhost/index.html` to start the LODE service.
+
+---
+
+## Common Issues <a name="commonIssues"></a>
+* Apache HTTP Server VC version is different to PHP VC version.
+* Run `cmd` as administrator and `cd \apache24\bin`. 
+	* Run `httpd -k start` to see what error you get.
+
+* Make sure the `php.ini` file has the `file_uploads` directive set to on.
+	* `file_uploads = On`
 
 ---
 

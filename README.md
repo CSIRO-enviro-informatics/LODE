@@ -184,7 +184,7 @@ The following installation guide is required for running the complete version of
 ---
 
 ## Diagram of LODE <a name="diagramOfLODE"></a>
-<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/LODE%20Diagram.png"/></p>
+<p align="center"><img src="https://imgur.com/a/WBG66"/></p>
 
 ---
 

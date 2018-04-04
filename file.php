@@ -10,13 +10,25 @@ Description: Preprocesses files for LODE.
 if($_FILES['file'])
 {
 	// directory to upload files to
-	$target_dir = "src/main/webapp/files/";
+	$target_dir = "files/";
 
 	// full file path of uploaded file
 	$target_file = $target_dir . basename($_FILES["file"]["name"]);
 
 	// temp. name of uploaded file
 	$tmp_name = $_FILES["file"]["tmp_name"];
+
+	// get all file names
+	$files = glob('files/*');
+
+	// iterate files
+	foreach($files as $file)
+	{ 
+	 	if(is_file($file))
+	  	{
+	    	unlink($file); // delete file
+		}
+	}
 
 	// move file from temp. location to target file directory
 	if (move_uploaded_file($tmp_name, $target_file)) 

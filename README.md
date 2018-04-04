@@ -172,12 +172,13 @@ The following installation guide is required for running the complete version of
 ---
 
 ## Common Issues <a name="commonIssues"></a>
-* Apache HTTP Server VC version is different to PHP VC version.
-* Run `cmd` as administrator and `cd \apache24\bin`. 
+* Apache HTTP Server VC version is different to PHP VC version. Make sure they are the same VC version.
+* Changes made to `httpd.conf` file doesn't work. Run `cmd` as administrator and `cd \apache24\bin`. 
 	* Run `httpd -k start` to see what error you get.
 
 * Make sure the `php.ini` file has the `file_uploads` directive set to on.
 	* `file_uploads = On`
+* Run `cmd` and `ApacheMonitor` as administrator when running Maven to avoid permission issues.
 
 ---
 

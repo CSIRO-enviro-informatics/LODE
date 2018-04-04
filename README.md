@@ -184,7 +184,7 @@ The following installation guide is required for running the complete version of
 ---
 
 ## Diagram of LODE <a name="diagramOfLODE"></a>
-<p align="center"><img src="https://imgur.com/a/WBG66"/></p>
+<blockquote class="imgur-embed-pub" lang="en" data-id="FZ2aBIe"><a href="//imgur.com/FZ2aBIe">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 ---
 

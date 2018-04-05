@@ -162,6 +162,13 @@ public class LodeServlet extends HttpServlet {
 
 				content = applyXSLTTransformation(content, stringURL, lang);
 
+				out.println(stringURL + "<br>");
+				out.println("Module value: " + request.getParameter("module") + "<br>");
+				out.println("useOWLAPI: " + useOWLAPI + "<br>");
+				out.println("imported: " + considerImportedOntologies + "<br>");
+				out.println("closure: " + considerImportedClosure + "<br>");
+				out.println("reasoner: " + useReasoner + "<br>");
+
 				out.println(content);
 				i = maxTentative;
 			} catch (Exception e) {

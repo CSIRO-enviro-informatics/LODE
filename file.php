@@ -26,7 +26,11 @@ if($_FILES['file'])
 	{ 
 	 	if(is_file($file))
 	  	{
-	    	unlink($file); // delete file
+	  		if($file != "files/readme.txt")
+	  		{
+	  			unlink($file); // delete file
+	  		}
+	    	
 		}
 	}
 
@@ -36,7 +40,7 @@ if($_FILES['file'])
         // echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
 
         // call the LODE service to process the new uploaded file
-        $url = "http://localhost:8080/lode/extract?url=http://localhost:8080/lode/files/" . basename($_FILES['file']['name']);
+        $url = "http://localhost:8080/lode/extract?url=http://localhost/files/" . basename($_FILES['file']['name']);
         header("Location: $url");
     } else 
     {

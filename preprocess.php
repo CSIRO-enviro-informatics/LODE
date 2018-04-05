@@ -2,11 +2,23 @@
 /*
 
 Author: Edmond Chuc
-Date: 29/03/2018
-Description: Preprocesses files for LODE.
+Date created: 29/03/2018
+Date modified: 05/04/2018
+Description: Preprocesses files or URL before calling the LODE service.
 
 */
 
+// if URL
+if( $_POST["url"] ) 
+{
+	// call the LODE service
+	$url = $_POST["url"];
+	header("Location: $url");
+
+	exit();
+}
+
+// if file
 if($_FILES['file'])
 {
 	// directory to upload files to
@@ -46,6 +58,8 @@ if($_FILES['file'])
     {
         echo "Sorry, there was an error uploading your file.";
     }
+
+    exit();
 }
 
 	

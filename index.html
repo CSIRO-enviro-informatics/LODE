@@ -1,24 +1,19 @@
 <!-- 
 Author: Edmond Chuc
-Date: 29/03/2018
-Description: The front page of the modified LODE service.
+Date created: 29/03/2018
+Date modified: 05/04/2018
+Description: The landing page of the modified LODE service.
  -->
 
 <!DOCTYPE html>
 
 <html>
    <body>
-      <p>Enter URL of ontology.</p>
-      <form action="/url.php" method="POST">
-            <input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
-         <input type = "submit" value="Generate Document" />
-      </form>
-
-      <p>Upload a file.</p>
+      <p>Enter URL of ontology or upload a file.</p>
       <form action="file.php" method="POST" enctype="multipart/form-data">
-         Select file to upload.
-         <input type="file" name="file">
-         <input type="submit" value="Generate Document" name="submit" />
+            <input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
+            <input type="file" name="file">
+            <input type="submit" value="Generate Document" name="submit" />
       </form>
    </body>
 </html>

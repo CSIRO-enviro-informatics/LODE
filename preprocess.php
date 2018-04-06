@@ -13,6 +13,7 @@ if( $_POST["url"] )
 {
 	// call the LODE service
 	$url = $_POST["url"];
+	$url = "http://localhost:8080/lode/extract?url=" . $url;
 	header("Location: $url");
 
 	exit();

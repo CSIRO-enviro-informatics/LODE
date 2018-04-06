@@ -1,7 +1,7 @@
 <!-- 
 Author: Edmond Chuc
 Date created: 29/03/2018
-Date modified: 05/04/2018
+Date modified: 06/04/2018
 Description: The landing page of the modified LODE service.
  -->
 
@@ -9,29 +9,30 @@ Description: The landing page of the modified LODE service.
 
 <html>
    <body>
+      <h1>LODE 2</h1>
       <p>Enter URL of ontology or upload a file.</p>
       <form action="preprocess.php" method="POST" enctype="multipart/form-data">
             <input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
             <input type="file" name="file">
             <input type="submit" value="Generate Document" name="submit" />
-            <div>
-            <span class="modules"><br/>
-               <label>Modules:</label>
-               <input type="radio" name="module" value="" checked="checked" /> <span class="text">None</span>
-               <input type="radio" name="module" value="owlapi" /> <span class="text">OWLAPI</span>
-               <span class="noWrap">
-                  <input type="radio" name="module" value="imported" /> <span class="text">OWLAPI + Imported</span>
+               <!-- <div>
+               <span class="modules"><br/>
+                  <label>Modules:</label>
+                  <input type="radio" name="module" value="" checked="checked" /> <span class="text">None</span>
+                  <input type="radio" name="module" value="owlapi" /> <span class="text">OWLAPI</span>
+                  <span class="noWrap">
+                     <input type="radio" name="module" value="imported" /> <span class="text">OWLAPI + Imported</span>
+                  </span>
+                  <span class="noWrap">
+                     <input type="radio" name="module" value="closure" /> <span class="text">OWLAPI + Closure</span>
+                  </span>
+               </span><br/><br/>
+               <input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> <span class="reasoner">Use the reasoner</span><br/><br/>
+               <span class="lang noWrap">
+                  <label for="number">Language</label>:
+                  <input id="number" type="text" name="lang_label" value="" placeholder="'en' if empty" />
                </span>
-               <span class="noWrap">
-                  <input type="radio" name="module" value="closure" /> <span class="text">OWLAPI + Closure</span>
-               </span>
-            </span><br/><br/>
-            <input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> <span class="reasoner">Use the reasoner</span><br/><br/>
-            <span class="lang noWrap">
-               <label for="number">Language</label>:
-               <input id="number" type="text" name="lang_label" value="" placeholder="'en' if empty" />
-            </span>
-         </div>
+            </div> -->
       </form>
    </body>
 </html>

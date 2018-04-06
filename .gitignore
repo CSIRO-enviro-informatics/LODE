@@ -15,3 +15,7 @@
 # Maven
 log/
 target/
+
+# don't track WAR files generated from these source file
+*.war
+

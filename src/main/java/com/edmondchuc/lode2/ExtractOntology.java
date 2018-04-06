@@ -1,18 +1,25 @@
 package com.edmondchuc.lode2;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -30,12 +37,21 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
+@MultipartConfig(location="C:\\Users\\chu101\\Desktop\\tmp",
+fileSizeThreshold=1024*1024*2, // 2MB
+maxFileSize=1024*1024*10,      // 10MB
+maxRequestSize=1024*1024*50)   // 50MB
+
 /**
  * Servlet implementation class ExtractOntology
  */
-//@WebServlet("/ExtractOntology")
+@WebServlet("/extract")
 public class ExtractOntology extends HttpServlet 
 {
+	// name of folder to be saved relative to web application
+	private static final String SAVE_DIR = "uploadFiles";
+	
+	// settings used in ApplyXSLT()
 	String xsltURL = "http://localhost:8080/lode/extraction.xsl";
 	String cssLocation = "http://localhost:8080/lode/";
 	String lang = "en";	// default
@@ -49,13 +65,114 @@ public class ExtractOntology extends HttpServlet
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    /**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		// initialise log4j
+		BasicConfigurator.configure();
+		
+		// TODO: have a safety check to ensure user only uploads one file
+		// get the file part of the request
+		Part filePart = request.getPart("file"); 
+		
+		// store the file content as input stream
+		InputStream fileContent = filePart.getInputStream();
+		
+	    // object to send the HTML response back to client
+	    PrintWriter out = response.getWriter();
+	    
+	    // convert the file content to string
+	    String result = getStringFromInputStream(fileContent);
+	    
+	    PrintWriter writer = new PrintWriter("C:\\Users\\chu101\\Desktop\\LODE\\src\\main\\webapp\\ontology.xml", "UTF-8");
+	    writer.println(result);
+	    writer.close();
+	    
+	    String ontologyURL = "http://localhost:8080/lode/ontology.xml";
+	    try {
+			result = parseWithOWLAPI(ontologyURL);
+		} catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    try {
+			result = ApplyXSLT(result, ontologyURL);
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+//	    // create ontology manager
+//	 	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+//	 	
+//	 	// load ontology from ontologyURL
+//	 	OWLOntology ontology = manager.loadOntology(IRI.create(result));
+//	    
+//	 	// document to store ontology parsed by OWLAPI
+//	 	StringDocumentTarget parsedOntology = new StringDocumentTarget();
+//	 		
+// 		// save ontology as RDF/XML to parsedOntology
+// 		manager.saveOntology(ontology, new RDFXMLDocumentFormat(), parsedOntology);
+// 		
+// 		result = parsedOntology.toString();
+//
+//		// Apply XSLT
+//		//content = extractor.exec(ontologyURL); //test
+//		result = ApplyXSLT(result, ontologyURL);
+//		
+//		// serve transformed content back to user
+		out.println(result);
+	}
+	
+	private String extractFileName(Part part) {
+	    String contentDisp = part.getHeader("content-disposition");
+	    String[] items = contentDisp.split(";");
+	    for (String s : items) {
+	        if (s.trim().startsWith("filename")) {
+	            return s.substring(s.indexOf("=") + 2, s.length()-1);
+	        }
+	    }
+	    return "";
+	}
+	
+	// convert InputStream to String
+	private static String getStringFromInputStream(InputStream is) {
+
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sb.toString();
+
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		
 		// initialise log4j
@@ -164,14 +281,4 @@ public class ExtractOntology extends HttpServlet
 	{
 		return "<html>" + "<head><title>LODE error</title></head>" + "<body>" + "<h2>" + "LODE error" + "</h2>" + "<p><strong>Reason: </strong>" + e.getMessage() + "</p>" + "</body>" + "</html>";
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }

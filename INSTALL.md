@@ -35,6 +35,17 @@ sudo nano /var/lib/tomcat8/conf/tomcat-users.xml
 # add in         <user username="admin" password="{TOMCAT_ADMIN_PWD}" roles="manager-gui,admin-gui"/>
 sudo service tomcat8 restart
 
+### Install Apache Maven
+sudo apt-get install maven
+`mvn -version`  check to see if java home is pointing to jdk
+
+### Install JDK
+'javac -version' check if java compiler is installed  
+if not, then..  
+sudo apt install openjdk-1.9~
+sudo nano /etc/environment  
+Declare the JAVA_HOME path and append to PATH
+
 #### install the LODE application in Tomcat
 sudo cp ~/lode/lode.war /var/lib/tomcat8/webapps/
 

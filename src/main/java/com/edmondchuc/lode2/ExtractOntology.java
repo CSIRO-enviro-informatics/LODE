@@ -12,7 +12,9 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Paths;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.annotation.MultipartConfig;
@@ -37,7 +39,8 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 
-@MultipartConfig(location="C:\\Users\\chu101\\Desktop\\tmp",
+@MultipartConfig
+(/*location="C:\\Users\\chu101\\Desktop\\tmp",*/
 fileSizeThreshold=1024*1024*2, // 2MB
 maxFileSize=1024*1024*10,      // 10MB
 maxRequestSize=1024*1024*50)   // 50MB
@@ -48,12 +51,14 @@ maxRequestSize=1024*1024*50)   // 50MB
 @WebServlet("/extract")
 public class ExtractOntology extends HttpServlet 
 {
-	// name of folder to be saved relative to web application
-	private static final String SAVE_DIR = "uploadFiles";
+	// set up upload path - info from	
+	// https://stackoverflow.com/questions/797549/get-login-username-in-java   
+	// may need to change for Windows support in the future
+	String username = System.getProperty("user.name");
 	
 	// settings used in ApplyXSLT()
-	String xsltURL = "http://localhost:8080/lode/extraction.xsl";
-	String cssLocation = "http://localhost:8080/lode/";
+	String xsltURL = "http://localhost:8080/extraction.xsl";
+	String cssLocation = "http://localhost:8080/";
 	String lang = "en";	// default
 	
 	private static final long serialVersionUID = 1L;
@@ -78,52 +83,56 @@ public class ExtractOntology extends HttpServlet
 		// get the file part of the request
 		Part filePart = request.getPart("file"); 
 		
-		// store the file content as input stream
-		InputStream fileContent = filePart.getInputStream();
+		// error message prints if invalid URL or file
+		String result = "Invalid URL or file.";
 		
+		// if the request is a file
+		if(filePart.getContentType().toString().equals("application/rdf+xml"))
+		{
+			// name of folder to be saved relative to web application
+			String saveDir = getServletContext().getRealPath(File.separator) + File.separator + "uploadedFiles";
+			
+			// get the name of the uploaded file
+			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			
+			// file path to save
+			final String filePath = saveDir + File.separator + fileName;
+			
+			// store the file content as input stream
+			InputStream fileContent = filePart.getInputStream();
+		    
+		    // convert the file content to string
+		    result = getStringFromInputStream(fileContent);
+	
+			// write ontology to be parsed to disk
+		     PrintWriter writer = new PrintWriter(filePath, "UTF-8");
+		     writer.println(result);
+		     writer.close();
+		    
+		     String ontologyURL = "http://localhost:8080/uploadedFiles/" + fileName;
+		     try {
+			 	result = parseWithOWLAPI(ontologyURL);
+			 } catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
+			 	// TODO Auto-generated catch block
+			 	e.printStackTrace();
+			 }
+		     try {
+			 	result = ApplyXSLT(result, ontologyURL);
+			 } catch (TransformerException e) {
+			 	// TODO Auto-generated catch block
+			 	e.printStackTrace();
+			 }
+		}
+		// request is URL, pass on to get
+		else if(filePart.getContentType().toString().equals("application/octet-stream"))
+		{
+			doGet(request, response);
+		}
+	     
 	    // object to send the HTML response back to client
 	    PrintWriter out = response.getWriter();
-	    
-	    // convert the file content to string
-	    String result = getStringFromInputStream(fileContent);
-	    
-	    PrintWriter writer = new PrintWriter("C:\\Users\\chu101\\Desktop\\LODE\\src\\main\\webapp\\ontology.xml", "UTF-8");
-	    writer.println(result);
-	    writer.close();
-	    
-	    String ontologyURL = "http://localhost:8080/lode/ontology.xml";
-	    try {
-			result = parseWithOWLAPI(ontologyURL);
-		} catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    try {
-			result = ApplyXSLT(result, ontologyURL);
-		} catch (TransformerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	    
-//	    // create ontology manager
-//	 	OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-//	 	
-//	 	// load ontology from ontologyURL
-//	 	OWLOntology ontology = manager.loadOntology(IRI.create(result));
-//	    
-//	 	// document to store ontology parsed by OWLAPI
-//	 	StringDocumentTarget parsedOntology = new StringDocumentTarget();
-//	 		
-// 		// save ontology as RDF/XML to parsedOntology
-// 		manager.saveOntology(ontology, new RDFXMLDocumentFormat(), parsedOntology);
-// 		
-// 		result = parsedOntology.toString();
-//
-//		// Apply XSLT
-//		//content = extractor.exec(ontologyURL); //test
-//		result = ApplyXSLT(result, ontologyURL);
-//		
-//		// serve transformed content back to user
+	   
+		// serve transformed content back to user
 		out.println(result);
 	}
 	

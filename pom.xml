@@ -88,6 +88,11 @@
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-maven-plugin</artifactId>
     <version>9.4.9.v20180320</version>
+    <!-- <configuration>
+      <connectors>
+        <port>80</port>
+      </connectors>
+    </configuration> -->
 </plugin>
 
       

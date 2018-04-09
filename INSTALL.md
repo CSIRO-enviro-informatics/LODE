@@ -29,7 +29,10 @@ Use `mvn -version` to check if java home is pointing to JDK and not JRE.
 
 #### Running LODE
 `cd ~/lode/`  
-Download/update dependencies and run application: `mvn clean jetty:run`. Test the application at http://localhost:8080/
+Download/update dependencies and run application: `mvn clean jetty:run`. Test the application at http://localhost:8080/.
+
+#### Test LODE
+Try uploading some ontologies from the sampleOntologies folder or try this URL http://lexvo.org/ontology.
 
 #### Host the static content
 `sudo cp -r ~/lode/theme/static /var/www/html/`

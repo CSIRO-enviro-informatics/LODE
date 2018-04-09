@@ -1,69 +1,35 @@
 # Install
-For the moment, these instructions are for Ubuntu 16.04 only.
+The install instructions have been tested on Ubuntu 16.04 and 17.10.
 
-## Installing on an AWS EC2 server
+### Installed on an AWS EC2 server
 
 * OS: Ubuntu 16.04
 * using a public IP address
 * 1GB RAM, 8GB storage
 
 
-### Basic OS config
-sudo timedatectl set-timezone Australia/Brisbane
-sudo apt update
-sudo apt upgrade -y
-
-
-### Get repo, build WAR
-cd ~
-mkdir lode
+#### Basic OS config
+`sudo timedatectl set-timezone Australia/Brisbane`  
+`sudo apt update`  
+`sudo apt upgrade -y`
 
 #### Git
-sudo apt install -y git
-git clone https://github.com/CSIRO-enviro-informatics/LODE.git lode
+`sudo apt install -y git`  
+`git clone https://github.com/CSIRO-enviro-informatics/LODE.git lode`
 
-#### Built WAR
-mvn ....
+#### Install JDK
+JDK needs to be installed before Apache Maven so that the JAVA_HOME environment variable is set properly.  
+Check if Java is installed by typing `javac -version`.
+If not installed, install the openjdk version.  
+* `sudo apt install openjdk-9-jkd-headless`
 
+#### Install Apache Maven
+`sudo apt-get install maven`  
+Use `mvn -version` to check if java home is pointing to JDK and not JRE.
 
-### Install server software
-#### Tomcat 8
-sudo apt install -y tomcat8
-sudo apt install -y tomcat8-admin
-sudo nano /var/lib/tomcat8/conf/tomcat-users.xml
-# add in         <role rolename="manager-gui"/>
-# add in         <user username="admin" password="{TOMCAT_ADMIN_PWD}" roles="manager-gui,admin-gui"/>
-sudo service tomcat8 restart
+#### Running LODE
+`cd ~/lode/`  
+Download/update dependencies and run application: `mvn clean jetty:run`. Test the application at http://localhost:8080/
 
-### Install Apache Maven
-sudo apt-get install maven
-`mvn -version`  check to see if java home is pointing to jdk
-
-### Install JDK
-'javac -version' check if java compiler is installed  
-if not, then..  
-sudo apt install openjdk-1.9~
-sudo nano /etc/environment  
-Declare the JAVA_HOME path and append to PATH
-
-#### install the LODE application in Tomcat
-sudo cp ~/lode/lode.war /var/lib/tomcat8/webapps/
-
-after WAR file extraction...
-
-#### test the LODE Tomcat app deployment
- <INSTALLATION_IP_ADDRESS>:8080/lode/extract?url=http://xmlns.com/foaf/spec/index.rdf -- you should build an HTML version of the FOAF ontology!
-
-
-#### Apache 2
-Apache is used to host the PHP forms used by this application and also the static web content needed for theming LODE outputs (CSS/JS).
-
-sudo apt install -y apache2
-
-##### Host the static content
-sudo cp -r ~/lode/theme/static /var/www/html/
-
-#### Get PHP forms working
-`# sudo apt install php # PHP7`  
-`# sudo apt install libapache2-mod-php`
-`# sudo cp webforms/* /var/www/html/ # copy the forms to Apache's web dirs`
+#### Host the static content
+`sudo cp -r ~/lode/theme/static /var/www/html/`

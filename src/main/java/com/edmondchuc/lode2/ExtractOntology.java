@@ -95,6 +95,8 @@ public class ExtractOntology extends HttpServlet
 			// get the name of the uploaded file
 			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 			
+			log("Received uploaded file: " + fileName);
+			
 			// file path to save
 			final String filePath = saveDir + File.separator + fileName;
 			
@@ -103,21 +105,28 @@ public class ExtractOntology extends HttpServlet
 		    
 		    // convert the file content to string
 		    result = getStringFromInputStream(fileContent);
-	
+		    
 			// write ontology to be parsed to disk
 		     PrintWriter writer = new PrintWriter(filePath, "UTF-8");
 		     writer.println(result);
 		     writer.close();
+		     
+		     log("Saved file to " + filePath);
 		    
 		     String ontologyURL = "http://localhost:8080/uploadedFiles/" + fileName;
-		     try {
+		     try 
+		     {
+		    	log("Parsing ontology with OWLAPI.");
 			 	result = parseWithOWLAPI(ontologyURL);
 			 } catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
 			 	// TODO Auto-generated catch block
 			 	e.printStackTrace();
 			 }
-		     try {
+		     try 
+		     {
+		    	 log("Applying XSLT.");
 			 	result = ApplyXSLT(result, ontologyURL);
+			 	log("Done.");
 			 } catch (TransformerException e) {
 			 	// TODO Auto-generated catch block
 			 	e.printStackTrace();
@@ -127,6 +136,10 @@ public class ExtractOntology extends HttpServlet
 		else if(filePart.getContentType().toString().equals("application/octet-stream"))
 		{
 			doGet(request, response);
+		}
+		else
+		{
+			log("Invalid URL or file.");
 		}
 	     
 	    // object to send the HTML response back to client
@@ -208,6 +221,8 @@ public class ExtractOntology extends HttpServlet
 			String ontologyURL = request.getParameter("url");
 			//String stringURL = request.getParameter("url");
 			
+			log("Received ontology URL " + ontologyURL);
+			
 			// cast string url to url
 			//URL ontologyURL = new URL(stringURL);
 			
@@ -217,8 +232,12 @@ public class ExtractOntology extends HttpServlet
 			// human-readable ontology to serve back to user
 			String content = "";
 			
+			log("Parsing ontology with OWLAPI.");
+			
 			// parse with OWLAPI
 			content = parseWithOWLAPI(ontologyURL);
+			
+			log("Applying XSLT");
 
 			// Apply XSLT
 			//content = extractor.exec(ontologyURL); //test
@@ -226,6 +245,8 @@ public class ExtractOntology extends HttpServlet
 			
 			// serve transformed content back to user
 			out.println(content);
+			
+			log("Done.");
 			
 			// TESTING
 			//out.println(xsltURL);

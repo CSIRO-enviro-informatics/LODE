@@ -57,8 +57,8 @@ public class ExtractOntology extends HttpServlet
 	String username = System.getProperty("user.name");
 	
 	// settings used in ApplyXSLT()
-	String xsltURL = "http://localhost:8080/extraction.xsl";
-	String cssLocation = "http://localhost:8080/";
+	String xsltURL = "http://115.70.8.75/extraction.xsl";
+	String cssLocation = "http://115.70.8.75/";
 	String lang = "en";	// default
 	
 	private static final long serialVersionUID = 1L;
@@ -149,16 +149,16 @@ public class ExtractOntology extends HttpServlet
 		out.println(result);
 	}
 	
-	private String extractFileName(Part part) {
-	    String contentDisp = part.getHeader("content-disposition");
-	    String[] items = contentDisp.split(";");
-	    for (String s : items) {
-	        if (s.trim().startsWith("filename")) {
-	            return s.substring(s.indexOf("=") + 2, s.length()-1);
-	        }
-	    }
-	    return "";
-	}
+//	private String extractFileName(Part part) {
+//	    String contentDisp = part.getHeader("content-disposition");
+//	    String[] items = contentDisp.split(";");
+//	    for (String s : items) {
+//	        if (s.trim().startsWith("filename")) {
+//	            return s.substring(s.indexOf("=") + 2, s.length()-1);
+//	        }
+//	    }
+//	    return "";
+//	}
 	
 	// convert InputStream to String
 	private static String getStringFromInputStream(InputStream is) {
@@ -257,12 +257,12 @@ public class ExtractOntology extends HttpServlet
 		}
 	}
 	
-	private void resolvePaths(HttpServletRequest request)
-	{
-		String xsltURL = "http://localhost:8080/lode/extraction.xsl";
-		String cssLocation = "http://localhost:8080/lode/";
-		String lang = "en";	// default
-	}
+//	private void resolvePaths(HttpServletRequest request)
+//	{
+//		String xsltURL = "http://115.70.8.75/extraction.xsl"; //"http://localhost:8080/lode/extraction.xsl";
+//		String cssLocation = "http://115.70.8.75/";
+//		String lang = "en";	// default
+//	}
 	
 	private String parseWithOWLAPI(String ontologyURL) throws OWLOntologyCreationException, OWLOntologyStorageException, TransformerException
 	{

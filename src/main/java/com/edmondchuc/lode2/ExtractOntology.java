@@ -84,7 +84,7 @@ public class ExtractOntology extends HttpServlet
 		Part filePart = request.getPart("file"); 
 		
 		// error message prints if invalid URL or file
-		String result = "Invalid URL or file.";
+		String result = "";
 		
 		// if the request is a file
 		if(filePart.getContentType().toString().equals("application/rdf+xml"))
@@ -139,6 +139,7 @@ public class ExtractOntology extends HttpServlet
 		}
 		else
 		{
+			result = "Invalid URL or file.";
 			log("Invalid URL or file.");
 		}
 	     

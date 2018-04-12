@@ -14,7 +14,7 @@ import java.net.URL;
 /**
  * Servlet implementation class GetSource
  */
-@WebServlet("/source")
+//@WebServlet("/source")
 public class GetSource extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

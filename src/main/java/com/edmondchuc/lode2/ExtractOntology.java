@@ -48,7 +48,7 @@ maxRequestSize=1024*1024*50)   // 50MB
 /**
  * Servlet implementation class ExtractOntology
  */
-@WebServlet("/extract")
+//@WebServlet("/extract")
 public class ExtractOntology extends HttpServlet 
 {
 	// set up upload path - info from	

@@ -1,0 +1,188 @@
+@prefix agr: <http://promsns.org/def/agr#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://promsns.org/def/agr> a owl:NamedIndividual,
+        owl:Ontology ;
+    rdfs:label "Agreements ontology"@en ;
+    dc:creator <https://orcid.org/0000-0002-8742-7730> ;
+    dcterms:created "2016-09-12"^^xsd:date ;
+    dcterms:creator <http://orcid.org/0000-0002-8742-7730> ;
+    dcterms:modified "2018-02-21"^^xsd:date ;
+    rdfs:comment """This Agreements Ontology is designed to model 'agreements' which are social contracts that include licenses, laws, contracts, Memoranda of Understanding, standards and definitional metadata.
+
+Agreements' purposes are to effect the behaviour of Agents that use Entities or undertake Activities. This ontology defines those effects as further actions (Requirment Resolutions) that satisfy stated Requirements articulated within the Agreement. The Requirement Resolutions can compelled to be performed with one of a number of different Imperatives such as MUST, SHOULD etc.
+
+This ontology's purpose is to support data sharing by making explicit the relationships between agreements and data, agreements and actions and agreements and Agents (people and organisations). Eventually it will also help with the interplay between different classes of agreements."""@en ;
+    owl:imports <http://www.w3.org/ns/org.ttl>,
+        <http://www.w3.org/ns/prov-o#> ;
+    owl:versionIRI <http://promsns.org/def/agr/1.3> ;
+    owl:versionInfo "1.3"^^xsd:string .
+
+agr:License a owl:Class ;
+    rdfs:label "License"@en ;
+    rdfs:comment """A specialised Agreement pertaining to licensing.
+
+This subclass introduces no restrictions to Agreement but is defined in this ontology due to the common expected use of Agreements for licenses. Its inclusion also indicated how (by subclassing) laws, MoUs and other specialised Agreements should be made."""@en ;
+    rdfs:subClassOf agr:Agreement .
+
+agr:MAY a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "MAY" .
+
+agr:MUST a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "MUST" .
+
+agr:MUST_NOT a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "MUST NOT" .
+
+agr:OPTIONAL a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "OPTIONAL" .
+
+agr:RECOMMENDED a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "RECOMMENDED" .
+
+agr:REQUIRED a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "REQUIRED" .
+
+agr:SHALL a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "SHALL" .
+
+agr:SHALL_NOT a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "SHALL NOT" .
+
+agr:SHOULD a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "SHOULD" .
+
+agr:SHOULD_NOT a agr:RequirementLevel,
+        owl:NamedIndividual ;
+    rdfs:label "SHOULD NOT" .
+
+agr:hadAgreement a owl:ObjectProperty ;
+    rdfs:label "had agreement"@en ;
+    rdfs:comment """Anything (an endurant thing like a Dataset or a Car) or a perdurant thing (like a course of action or a process) can have a related Agreement that affects Agents related to the production, use or agency related to the thing.
+
+The way Agreements affect Agents is through the articulation of Requirements - required actions - which exist with varying imperatives."""@en ;
+    rdfs:range agr:Agreement ;
+    rdfs:subPropertyOf prov:wasInfluencedBy .
+
+agr:hadScope a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasInfluencedBy ;
+    owl:inverseOf agr:scopeOf .
+
+agr:requirementOf a owl:AnnotationProperty ;
+    rdfs:range agr:Agreement ;
+    rdfs:subPropertyOf dcterms:isPartOf .
+
+agr:requires a owl:AnnotationProperty ;
+    rdfs:range agr:Requirement ;
+    rdfs:subPropertyOf dcterms:hasPart .
+
+agr:satisfiedBy a owl:ObjectProperty ;
+    rdfs:comment "satisfied by"@en ;
+    rdfs:subPropertyOf prov:wasInfluencedBy ;
+    owl:inverseOf agr:satisfies .
+
+agr:withinScopeOf a owl:ObjectProperty ;
+    rdfs:label "within scope"@en ;
+    rdfs:comment "inverse of hasWithinScope"@en ;
+    rdfs:range agr:Agreement ;
+    rdfs:subPropertyOf prov:wasInfluencedBy .
+
+dcterms:source a owl:AnnotationProperty .
+
+agr:RequirementResolution a owl:Class ;
+    rdfs:label "Requirement Resolution"@en ;
+    rdfs:comment """An action (a prov:Activity) that resolves one or more Requirements.
+
+Since a Requirement is a subclass of prov:Plan, a Requirement Resolution is then a prov:Activity which is conducted according to the Plan."""@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty agr:satisfies ;
+            owl:someValuesFrom agr:Requirement ],
+        prov:Activity .
+
+agr:hadImperative a owl:ObjectProperty ;
+    rdfs:label "had imperative"@en ;
+    rdfs:comment """Something (permissive domain for this property) had an imperative according to a particular Imperative.
+
+e.g. Requirement X: "Undertake Action Y" hadImperative agr:MUST
+
+This indicates the Requirment MUST be stafisfied by the undertaking of Action Y.
+
+The Imperative individuals are sources from RFC2119 (https://www.ietf.org/rfc/rfc2119.txt)."""@en ;
+    rdfs:range agr:Imperative ;
+    rdfs:subPropertyOf prov:hadPlan .
+
+agr:scopeOf a owl:ObjectProperty ;
+    rdfs:label "scope of"@en ;
+    rdfs:comment "An Agent is within the scopeOf an Agreement if that Agent, or members of it if it is a collection Agent such as a Group or Organisation, are bound by that Agreement's requirements within a certain Agreement use scenario."@en ;
+    rdfs:range agr:Agreement ;
+    rdfs:subPropertyOf prov:wasInfluencedBy .
+
+agr:wasMemberOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasInfluencedBy ;
+    owl:inverseOf prov:hadMember .
+
+dcterms:Agent a owl:Class .
+
+dcterms:hasPart a owl:AnnotationProperty .
+
+dcterms:isPartOf a owl:AnnotationProperty .
+
+<https://creativecommons.org/ns#Requirement> a owl:Class .
+
+<https://orcid.org/0000-0002-8742-7730> a dcterms:Agent,
+        owl:NamedIndividual ;
+    rdfs:label "Nicholas Car"@en ;
+    rdfs:comment "Contact Nicholas on nicholas.car@csiro.au"@en .
+
+agr:Imperative a owl:Class ;
+    rdfs:label "Imperative"@en ;
+    dcterms:source "Named Individual Imperatives in this ontology are taken from RFC2119 (https://www.ietf.org/rfc/rfc2119.txt)."@en ;
+    rdfs:comment "An Imperative is the force with which a Requirement compels an Agents within the scope of an Agreement containing that Requirment to take action expressed in a RequirementResolution."@en ;
+    rdfs:subClassOf prov:Plan .
+
+agr:satisfies a owl:ObjectProperty ;
+    rdfs:label "satisfies"@en ;
+    rdfs:comment "A Requirement Resolution may satisfy Requirement(s)"@en ;
+    rdfs:domain agr:RequirementResolution ;
+    rdfs:range agr:Requirement ;
+    rdfs:subPropertyOf prov:wasInfluencedBy .
+
+agr:Requirement a owl:Class ;
+    rdfs:label "Requirement"@en ;
+    rdfs:comment """An action that may be requested of an agent requiring demonstrable fullfillment via a RequirmentResolution action with an imperative given by a RequirementLevel. The RequirmentResolution is thus conducted in accordance with the instructions implicit or explicit in the Requirement.
+
+A Requrement is a specialised version of both a Creative Commons Requirement (a cc:Requirement is "an action that may or may not be requested of you") and a prov:Plan ("A plan is an entity that represents a set of actions or steps intended by one or more agents to achieve some goals")."""@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:onProperty agr:wasMemberOf ;
+            owl:someValuesFrom agr:Agreement ],
+        [ a owl:Restriction ;
+            owl:onClass agr:Imperative ;
+            owl:onProperty agr:hadImperative ;
+            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ],
+        prov:Plan,
+        <https://creativecommons.org/ns#Requirement> .
+
+agr:Agreement a owl:Class ;
+    rdfs:label "Agreement"@en ;
+    rdfs:comment "A collection of Requirements."@en ;
+    rdfs:subClassOf prov:Collection .
+
+agr:RequirementLevel a owl:Class .

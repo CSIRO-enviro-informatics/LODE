@@ -41,7 +41,8 @@ Try uploading some ontologies from the sampleOntologies folder or try this URL h
 #### Download Jetty Runner
 `mkdir ~/jetty`  
 `cd ~/jetty`  
-`wget http://central.maven.org/maven2/org/eclipse/jetty/jetty-webapp/9.4.9.v20180320/jetty-webapp-9.4.9.v20180320.jar`  
+`wget http://central.maven.org/maven2/org/eclipse/jetty/jetty-runner/9.4.8.v20171121/jetty-runner-9.4.8.v20171121.jar`  
+`chmod 764 jetty-runner-9.4.8.v20171121.jar`  
 (ref: http://www.baeldung.com/deploy-to-jetty)
 
 #### Create WAR and deploy to Jetty Runner

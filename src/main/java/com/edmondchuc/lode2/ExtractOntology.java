@@ -57,8 +57,8 @@ public class ExtractOntology extends HttpServlet
 	String username = System.getProperty("user.name");
 	
 	// settings used in ApplyXSLT()
-	String xsltURL = "http://115.70.8.75/extraction.xsl";
-	String cssLocation = "http://115.70.8.75/";
+	String xsltURL = "http://localhost:8080/extraction.xsl";//"http://115.70.8.75/extraction.xsl";
+	String cssLocation = "http://localhost:8080/"; //"http://115.70.8.75/";
 	String lang = "en";	// default
 	
 	private static final long serialVersionUID = 1L;

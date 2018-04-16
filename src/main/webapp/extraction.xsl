@@ -33,7 +33,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     <xsl:include href="common-functions.xsl"/>
     <xsl:include href="structural-reasoner.xsl"/>
     
-    <xsl:output encoding="UTF-8" indent="no" method="xhtml" />
+    <xsl:output encoding="UTF-8" indent="no" method="html" />
     
     <xsl:param name="lang" select="'en'" as="xs:string" />
     <xsl:param name="css-location" select="'./'" as="xs:string" />
@@ -90,7 +90,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     </xsl:variable>
     
     <xsl:template match="rdf:RDF">
-        <html xmlns="http://www.w3.org/1999/xhtml">
+ 	<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
+        <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
             <xsl:choose>
                 <xsl:when test="owl:Ontology">
                     <xsl:apply-templates select="owl:Ontology" />

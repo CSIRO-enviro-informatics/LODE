@@ -132,7 +132,7 @@ public class ExtractOntology extends HttpServlet
 			 	e.printStackTrace();
 			 }
 		}
-		// request is URL, pass on to get
+		// request is URL, pass on to get()
 		else if(filePart.getContentType().toString().equals("application/octet-stream"))
 		{
 			doGet(request, response);
@@ -142,6 +142,8 @@ public class ExtractOntology extends HttpServlet
 			result = "Invalid URL or file.";
 			log("Invalid URL or file.");
 		}
+		
+		result = removeDoubleTitle(result);
 	     
 	    // object to send the HTML response back to client
 	    PrintWriter out = response.getWriter();
@@ -244,6 +246,8 @@ public class ExtractOntology extends HttpServlet
 			//content = extractor.exec(ontologyURL); //test
 			content = ApplyXSLT(content, ontologyURL);
 			
+			content = removeDoubleTitle(content);
+			
 			// serve transformed content back to user
 			out.println(content);
 			
@@ -280,6 +284,32 @@ public class ExtractOntology extends HttpServlet
 		manager.saveOntology(ontology, new RDFXMLDocumentFormat(), parsedOntology);
 		
 		return parsedOntology.toString();
+	}
+	
+	private String removeDoubleTitle(String result)
+	{
+		// the start index of '</title>' tag if double title exists
+	    int endOfStart = result.indexOf("</title><title>");
+	    
+	    // loops until no more double titles found
+	    while(endOfStart != -1)
+	    {
+	    	// get the last index of the double title
+	    	int end = endOfStart + 8;
+	    	
+	    	// find start index of the double title
+	        int start = result.indexOf("<title>");
+	        
+	        // get double title as a substring
+	        String doubleString = new String(result.substring(start, end));
+	        
+	        // remove double title
+	        result = result.replaceFirst(doubleString, "");
+	        
+	        // check if any double titles remain
+	        endOfStart = result.indexOf("</title><title>");
+	    }
+	    return result;
 	}
 	
 	private String ApplyXSLT(String result, String ontologyURL) throws TransformerException

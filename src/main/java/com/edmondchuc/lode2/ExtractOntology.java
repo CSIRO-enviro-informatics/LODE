@@ -88,6 +88,10 @@ public class ExtractOntology extends HttpServlet
 		// error message prints if invalid URL or file
 		String result = "";
 		
+		// flag to prevent tidy() being called twice if request is URL
+		// don't really like this implementation but it will do for now
+		boolean isFile = true;
+		
 		// if the request is a file
 		if(filePart.getContentType().toString().equals("application/rdf+xml"))
 		{
@@ -137,6 +141,7 @@ public class ExtractOntology extends HttpServlet
 		// request is URL, pass on to get()
 		else if(filePart.getContentType().toString().equals("application/octet-stream"))
 		{
+			isFile = false;
 			doGet(request, response);
 		}
 		else
@@ -145,13 +150,16 @@ public class ExtractOntology extends HttpServlet
 			log("Invalid URL or file.");
 		}
 		
-		result = tidy(result);
-	     
-	    // object to send the HTML response back to client
-	    PrintWriter out = response.getWriter();
-	   
-		// serve transformed content back to user
-		out.println(result);
+		if(isFile)
+		{
+			result = tidy(result);
+		     
+		    // object to send the HTML response back to client
+		    PrintWriter out = response.getWriter();
+		   
+			// serve transformed content back to user
+			out.println(result);
+		}
 	}
 	
 //	private String extractFileName(Part part) {
@@ -295,6 +303,48 @@ public class ExtractOntology extends HttpServlet
 		
 		log("Formatting HTML.");
 		result = formatHTML(result);
+		
+		log("Assigning fragments.");
+		result = assignFragments(result);
+		
+		log("Done.");
+		
+		return result;
+	}
+	
+	private String assignFragments(String result)
+	{
+		// the start position of the last "#d4e" fragment found
+		int lastStart = 0;
+		
+		// loop until all fragments are assigned
+		while(result.contains("#d4e"))
+        {
+			// segment to be replaced
+        	int start = result.indexOf("#d4e", lastStart+1);
+        	int end = result.indexOf("\" title", start);
+        	if(start == -1)
+        	{
+        		// no more random fragments found after the last one
+        		break;
+        	}
+        	String d = result.substring(start, end);
+        	
+        	int startFrag = result.indexOf("#", start+1);
+        	int endFrag = result.indexOf("\">", start+1);
+        	// no valid hash fragment found
+        	// e.g.
+        	// <li><a href="#d4e414" title="https://orcid.org/0000-0002-8742-7730">Nicholas Car</a></li>
+        	if(startFrag < endFrag)
+        	{
+        		String fragment = result.substring(startFrag, endFrag);
+            	
+            	result = result.replace(d,  fragment);
+            	System.out.println(d + " " + fragment);
+        	}
+        	
+        	lastStart = start;
+        }
 		
 		return result;
 	}

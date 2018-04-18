@@ -30,6 +30,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.BasicConfigurator;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.StringDocumentTarget;
@@ -143,7 +145,7 @@ public class ExtractOntology extends HttpServlet
 			log("Invalid URL or file.");
 		}
 		
-		result = removeDoubleTitle(result);
+		result = tidy(result);
 	     
 	    // object to send the HTML response back to client
 	    PrintWriter out = response.getWriter();
@@ -246,7 +248,7 @@ public class ExtractOntology extends HttpServlet
 			//content = extractor.exec(ontologyURL); //test
 			content = ApplyXSLT(content, ontologyURL);
 			
-			content = removeDoubleTitle(content);
+			content = tidy(content);
 			
 			// serve transformed content back to user
 			out.println(content);
@@ -286,6 +288,31 @@ public class ExtractOntology extends HttpServlet
 		return parsedOntology.toString();
 	}
 	
+	private String tidy(String result)
+	{
+		log("Removing double titles");
+		result = removeDoubleTitle(result);
+		
+		log("Formatting HTML.");
+		result = formatHTML(result);
+		
+		return result;
+	}
+	
+	private String formatHTML(String result)
+	{
+		// format HTML with Jsoup
+		Document doc = Jsoup.parse(result);
+		
+		// set indentation to 4 spaces
+		doc.outputSettings().indentAmount(4); 
+		
+		return doc.toString();
+	}
+	
+	/*
+	 * Note: removeDoubleTitle assumes the HTML String is unformatted
+	 */
 	private String removeDoubleTitle(String result)
 	{
 		// the start index of '</title>' tag if double title exists

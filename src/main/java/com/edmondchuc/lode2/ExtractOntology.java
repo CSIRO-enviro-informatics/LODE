@@ -132,7 +132,6 @@ public class ExtractOntology extends HttpServlet
 		     {
 		    	 log("Applying XSLT.");
 			 	result = ApplyXSLT(result, ontologyURL);
-			 	log("Done.");
 			 } catch (TransformerException e) {
 			 	// TODO Auto-generated catch block
 			 	e.printStackTrace();
@@ -264,8 +263,6 @@ public class ExtractOntology extends HttpServlet
 			// serve transformed content back to user
 			out.println(content);
 			
-			log("Done.");
-			
 			// TESTING
 			//out.println(xsltURL);
 		}
@@ -308,7 +305,7 @@ public class ExtractOntology extends HttpServlet
 		result = formatHTML(result);
 		
 //		log("Assigning fragments.");
-//		result = assignFragments(result);
+		result = assignFragments(result);
 		
 		log("Done.");
 		
@@ -323,7 +320,7 @@ public class ExtractOntology extends HttpServlet
 		// loop until all fragments are assigned
 		while(result.contains("#d4e"))
         {
-			// segment to be replaced
+			// find the random fragment
         	int start = result.indexOf("#d4e", lastStart+1);
         	int end = result.indexOf("\" title", start);
         	if(start == -1)
@@ -331,19 +328,29 @@ public class ExtractOntology extends HttpServlet
         		// no more random fragments found after the last one
         		break;
         	}
-        	String d = result.substring(start, end);
+        	String dHash = result.substring(start, end); // e.g. #d4e199
+        	String d = result.substring(start+1, end);	 // e.g d4e199
         	
         	int startFrag = result.indexOf("#", start+1);
         	int endFrag = result.indexOf("\">", start+1);
+        	
         	// no valid hash fragment found
         	// e.g.
         	// <li><a href="#d4e414" title="https://orcid.org/0000-0002-8742-7730">Nicholas Car</a></li>
         	if(startFrag < endFrag)
         	{
-        		String fragment = result.substring(startFrag, endFrag);
+        		String fragmentHash = result.substring(startFrag, endFrag);
+        		String fragment = result.substring(startFrag+1, endFrag);
             	
-            	result = result.replace(d,  fragment);
+        		// anchor href
+            	result = result.replace(dHash,  fragmentHash);
             	System.out.println(d + " " + fragment);
+            	
+            	// replace all ids with fragment name
+            	while(result.indexOf(d) != -1)
+            	{
+            		result = result.replace(d,  fragment);
+            	}
         	}
         	
         	lastStart = start;

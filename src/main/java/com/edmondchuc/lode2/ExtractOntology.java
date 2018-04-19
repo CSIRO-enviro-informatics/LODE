@@ -141,6 +141,7 @@ public class ExtractOntology extends HttpServlet
 		// request is URL, pass on to get()
 		else if(filePart.getContentType().toString().equals("application/octet-stream"))
 		{
+			log("Received URL, passing on to doGet().");
 			isFile = false;
 			doGet(request, response);
 		}
@@ -160,6 +161,8 @@ public class ExtractOntology extends HttpServlet
 			// serve transformed content back to user
 			out.println(result);
 		}
+		
+		log(filePart.getContentType().toString());
 	}
 	
 //	private String extractFileName(Part part) {
@@ -299,13 +302,13 @@ public class ExtractOntology extends HttpServlet
 	private String tidy(String result)
 	{
 		log("Removing double titles");
-		result = removeDoubleTitle(result);
+		result = removeDuplicateTitle(result);
 		
 		log("Formatting HTML.");
 		result = formatHTML(result);
 		
-		log("Assigning fragments.");
-		result = assignFragments(result);
+//		log("Assigning fragments.");
+//		result = assignFragments(result);
 		
 		log("Done.");
 		
@@ -360,33 +363,57 @@ public class ExtractOntology extends HttpServlet
 		return doc.toString();
 	}
 	
+//	private String removeDoubleTitle(String result)
+//	{
+//		// the start index of '</title>' tag if double title exists
+//	    int endOfStart = result.indexOf("</title><title>");
+//	    
+//	    // loops until no more double titles found
+//	    while(endOfStart != -1)
+//	    {
+//	    	// get the last index of the double title
+//	    	int end = endOfStart + 8;
+//	    	
+//	    	// find start index of the double title
+//	        int start = result.indexOf("<title>");
+//	        
+//	        // get double title as a substring
+//	        String doubleString = new String(result.substring(start, end));
+//	        
+//	        // escaping parenthesis and spaces
+//	        doubleString = doubleString.replaceAll("\\(", "\\\\(");
+//	        doubleString = doubleString.replaceAll("\\)", "\\\\)");
+//	        doubleString = doubleString.replaceAll(" ", "\\\\s");
+//	        
+//	        // remove double title
+//	        result = result.replaceFirst(doubleString, "");
+//	        
+//	        // check if any double titles remain
+//	        endOfStart = result.indexOf("</title><title>");
+//	    }
+//	    return result;
+//	}
+	
 	/*
 	 * Note: removeDoubleTitle assumes the HTML String is unformatted
 	 */
-	private String removeDoubleTitle(String result)
+	private String removeDuplicateTitle(String result)
 	{
-		// the start index of '</title>' tag if double title exists
-	    int endOfStart = result.indexOf("</title><title>");
-	    
-	    // loops until no more double titles found
-	    while(endOfStart != -1)
-	    {
-	    	// get the last index of the double title
-	    	int end = endOfStart + 8;
-	    	
-	    	// find start index of the double title
-	        int start = result.indexOf("<title>");
-	        
-	        // get double title as a substring
-	        String doubleString = new String(result.substring(start, end));
-	        
-	        // remove double title
-	        result = result.replaceFirst(doubleString, "");
-	        
-	        // check if any double titles remain
-	        endOfStart = result.indexOf("</title><title>");
-	    }
-	    return result;
+		// check if duplicate title exists
+		if(result.indexOf("</title><title>") != -1)
+		{
+			// find the title
+			int start = result.indexOf("<title>");
+			int end = result.indexOf("</title>") + 8;
+			String title = result.substring(start, end);
+			
+			// remove all titles
+			result = result.replace(title, "");
+			
+			// add title back in
+			result = result.substring(0, start) + title + result.substring(start);
+		}
+		return result;
 	}
 	
 	private String ApplyXSLT(String result, String ontologyURL) throws TransformerException

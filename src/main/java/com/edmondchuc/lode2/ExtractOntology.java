@@ -304,7 +304,7 @@ public class ExtractOntology extends HttpServlet
 		log("Formatting HTML.");
 		result = formatHTML(result);
 		
-//		log("Assigning fragments.");
+		log("Assigning fragments.");
 		result = assignFragments(result);
 		
 		log("Done.");
@@ -314,47 +314,64 @@ public class ExtractOntology extends HttpServlet
 	
 	private String assignFragments(String result)
 	{
-		// the start position of the last "#d4e" fragment found
-		int lastStart = 0;
+		// get the IRI around this index
+		int IRISub = result.indexOf("IRI:");
 		
-		// loop until all fragments are assigned
-		while(result.contains("#d4e"))
-        {
-			// find the random fragment
-        	int start = result.indexOf("#d4e", lastStart+1);
-        	int end = result.indexOf("\" title", start);
-        	if(start == -1)
-        	{
-        		// no more random fragments found after the last one
-        		break;
-        	}
-        	String dHash = result.substring(start, end); // e.g. #d4e199
-        	String d = result.substring(start+1, end);	 // e.g d4e199
-        	
-        	int startFrag = result.indexOf("#", start+1);
-        	int endFrag = result.indexOf("\">", start+1);
-        	
-        	// no valid hash fragment found
-        	// e.g.
-        	// <li><a href="#d4e414" title="https://orcid.org/0000-0002-8742-7730">Nicholas Car</a></li>
-        	if(startFrag < endFrag)
-        	{
-        		String fragmentHash = result.substring(startFrag, endFrag);
-        		String fragment = result.substring(startFrag+1, endFrag);
-            	
-        		// anchor href
-            	result = result.replace(dHash,  fragmentHash);
-            	System.out.println(d + " " + fragment);
-            	
-            	// replace all ids with fragment name
-            	while(result.indexOf(d) != -1)
-            	{
-            		result = result.replace(d,  fragment);
-            	}
-        	}
-        	
-        	lastStart = start;
-        }
+		// if IRI title exists
+		if(IRISub != -1)
+		{
+			// find the IRI
+			int start = result.indexOf("<dd>", IRISub) + 4;
+			int end = result.indexOf("</dd>");
+			String IRI = result.substring(start,  end);
+			IRI = IRI.trim(); // eliminated leading and trailing whitespace
+			
+			// last index of d4e occurrence
+			int last = 0;
+			
+			while(result.indexOf("#d4e", last) != -1)
+			{
+				int start_d4e = result.indexOf("\"#d4e", last);	// get the start of the "d4e..." index
+				int end_d4e = result.indexOf("\"", start_d4e+1) + 1;
+				String d4eHash = result.substring(start_d4e, end_d4e);
+				String d4e = "\"" + result.substring(start_d4e + 2, end_d4e - 1) + "\"";
+				String line = result.substring(start_d4e, result.indexOf("\n", start_d4e));	// get the line
+				
+				// if line contains IRI, assign fragment names
+				if(line.contains(IRI))
+				{
+					// check if it contains a hash
+					if(line.indexOf("#", 3) != -1)
+					{
+						// get fragment name
+						int startFrag = result.indexOf("#", start_d4e+2);
+						int endFrag = result.indexOf("\">", startFrag);
+						String fragmentHash = "\"" + result.substring(startFrag, endFrag) + "\"";
+						String fragment = "\"" + result.substring(startFrag + 1, endFrag) + "\"";
+						
+						// replace d4e with fragment name
+						result = result.replace(d4eHash, fragmentHash);
+						result = result.replace(d4e, fragment);
+						
+						System.out.println(d4e + " " + fragmentHash);
+					}
+					// get fragment name from slash
+					else
+					{
+						int endFrag = result.indexOf("\">", end_d4e);
+						int startFrag = result.lastIndexOf("/", endFrag);
+						String fragmentHash = "\"#" + result.substring(startFrag + 1, endFrag) + "\"";
+						String fragment = "\"" + result.substring(startFrag + 1, endFrag) + "\"";
+						
+						System.out.println(d4e + " " + fragmentHash);
+					}
+				}
+				
+				last = end_d4e;
+			}
+			
+		}
+		
 		
 		return result;
 	}

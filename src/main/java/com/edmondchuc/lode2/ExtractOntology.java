@@ -13,6 +13,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,6 +41,8 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
 @MultipartConfig
 (/*location="C:\\Users\\chu101\\Desktop\\tmp",*/
@@ -80,20 +83,37 @@ public class ExtractOntology extends HttpServlet
 	{
 		// initialise log4j
 		BasicConfigurator.configure();
+		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
 		
 		// TODO: have a safety check to ensure user only uploads one file
 		// get the file part of the request
 		Part filePart = request.getPart("file"); 
 		
-		// error message prints if invalid URL or file
-		String result = "";
-		
 		// flag to prevent tidy() being called twice if request is URL
 		// don't really like this implementation but it will do for now
-		boolean isFile = true;
+		boolean isFile = false;
+		
+		String filename = null;
+		
+		// get header type
+		String header = filePart.getHeader("content-disposition");
+		if(header.contains("filename=\"\""))
+		{
+			log("URL incoming");
+		}
+		else
+		{
+			log("file incoming");
+			isFile = true;
+			int index = header.indexOf("filename") + 10;
+			filename = header.substring(index, header.indexOf("\"", index + 1));
+			System.out.println(filename);
+		}
+		
+		String result = "";
 		
 		// if the request is a file
-		if(filePart.getContentType().toString().equals("application/rdf+xml"))
+		if(isFile)
 		{
 			// name of folder to be saved relative to web application
 			String saveDir = getServletContext().getRealPath(File.separator) + File.separator + "uploadedFiles";
@@ -138,16 +158,11 @@ public class ExtractOntology extends HttpServlet
 			 }
 		}
 		// request is URL, pass on to get()
-		else if(filePart.getContentType().toString().equals("application/octet-stream"))
+		else
 		{
 			log("Received URL, passing on to doGet().");
 			isFile = false;
 			doGet(request, response);
-		}
-		else
-		{
-			result = "Invalid URL or file.";
-			log("Invalid URL or file.");
 		}
 		
 		if(isFile)
@@ -160,8 +175,6 @@ public class ExtractOntology extends HttpServlet
 			// serve transformed content back to user
 			out.println(result);
 		}
-		
-		log(filePart.getContentType().toString());
 	}
 	
 //	private String extractFileName(Part part) {

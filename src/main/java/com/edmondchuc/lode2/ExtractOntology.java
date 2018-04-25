@@ -61,9 +61,10 @@ public class ExtractOntology extends HttpServlet
 	// may need to change for Windows support in the future
 	String username = System.getProperty("user.name");
 	
-	// settings used in ApplyXSLT()
-	String xsltURL = "http://localhost:8080/extraction.xsl";//"http://115.70.8.75/extraction.xsl";
-	String cssLocation = "http://localhost:8080/"; //"http://115.70.8.75/";
+	// settings (point them to server when deploying)
+	String xsltURL = "http://localhost:8080/extraction.xsl";
+	String cssLocation = "http://localhost:8080/";
+	String uploadedFilePath = "http://localhost:8080/uploadedFiles/";
 	String lang = "en";	// default
 	
 	private static final long serialVersionUID = 1L;
@@ -80,10 +81,8 @@ public class ExtractOntology extends HttpServlet
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
-		// initialise log4j
-		BasicConfigurator.configure();
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
+	{	
+		loggerInit();
 		
 		// TODO: have a safety check to ensure user only uploads one file
 		// get the file part of the request
@@ -110,8 +109,6 @@ public class ExtractOntology extends HttpServlet
 			System.out.println(filename);
 		}
 		
-		String result = "";
-		
 		// if the request is a file
 		if(isFile)
 		{
@@ -130,7 +127,7 @@ public class ExtractOntology extends HttpServlet
 			InputStream fileContent = filePart.getInputStream();
 		    
 		    // convert the file content to string
-		    result = getStringFromInputStream(fileContent);
+		    String result = getStringFromInputStream(fileContent);
 		    
 			// write ontology to be parsed to disk
 		     PrintWriter writer = new PrintWriter(filePath, "UTF-8");
@@ -139,23 +136,11 @@ public class ExtractOntology extends HttpServlet
 		     
 		     log("Saved file to " + filePath);
 		    
-		     String ontologyURL = "http://localhost:8080/uploadedFiles/" + fileName;
-		     try 
-		     {
-		    	log("Parsing ontology with OWLAPI.");
-			 	result = parseWithOWLAPI(ontologyURL);
-			 } catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
-			 	// TODO Auto-generated catch block
-			 	e.printStackTrace();
-			 }
-		     try 
-		     {
-		    	 log("Applying XSLT.");
-			 	result = ApplyXSLT(result, ontologyURL);
-			 } catch (TransformerException e) {
-			 	// TODO Auto-generated catch block
-			 	e.printStackTrace();
-			 }
+		     String ontologyURL = uploadedFilePath + fileName;
+		     
+		     PrintWriter out = response.getWriter();
+		     
+		     transform(ontologyURL, out);
 		}
 		// request is URL, pass on to get()
 		else
@@ -164,58 +149,6 @@ public class ExtractOntology extends HttpServlet
 			isFile = false;
 			doGet(request, response);
 		}
-		
-		if(isFile)
-		{
-			result = tidy(result);
-		     
-		    // object to send the HTML response back to client
-		    PrintWriter out = response.getWriter();
-		   
-			// serve transformed content back to user
-			out.println(result);
-		}
-	}
-	
-//	private String extractFileName(Part part) {
-//	    String contentDisp = part.getHeader("content-disposition");
-//	    String[] items = contentDisp.split(";");
-//	    for (String s : items) {
-//	        if (s.trim().startsWith("filename")) {
-//	            return s.substring(s.indexOf("=") + 2, s.length()-1);
-//	        }
-//	    }
-//	    return "";
-//	}
-	
-	// convert InputStream to String
-	private static String getStringFromInputStream(InputStream is) {
-
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
-		String line;
-		try {
-
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return sb.toString();
-
 	}
 
 	/**
@@ -223,10 +156,7 @@ public class ExtractOntology extends HttpServlet
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		
-		// initialise log4j
-		BasicConfigurator.configure();
+		loggerInit();
 		
 		// set the response as HTML
 		response.setContentType("text/html");
@@ -237,12 +167,6 @@ public class ExtractOntology extends HttpServlet
 		// object to send the HTML response back to client
 		PrintWriter out = response.getWriter();
 		
-		// set paths and settings
-		//resolvePaths(request);
-		
-		//SourceExtractor extractor = new SourceExtractor();	//test
-		//extractor.addMimeTypes(MimeType.mimeTypes);	//test
-		
 		try 
 		{
 			// get the url as string
@@ -251,33 +175,7 @@ public class ExtractOntology extends HttpServlet
 			
 			log("Received ontology URL " + ontologyURL);
 			
-			// cast string url to url
-			//URL ontologyURL = new URL(stringURL);
-			
-			// set follow redirects to true for HTTP
-			//HttpURLConnection.setFollowRedirects(true);	//test
-			
-			// human-readable ontology to serve back to user
-			String content = "";
-			
-			log("Parsing ontology with OWLAPI.");
-			
-			// parse with OWLAPI
-			content = parseWithOWLAPI(ontologyURL);
-			
-			log("Applying XSLT");
-
-			// Apply XSLT
-			//content = extractor.exec(ontologyURL); //test
-			content = ApplyXSLT(content, ontologyURL);
-			
-			content = tidy(content);
-			
-			// serve transformed content back to user
-			out.println(content);
-			
-			// TESTING
-			//out.println(xsltURL);
+			transform(ontologyURL, out);
 		}
 		catch (Exception e) 
 		{
@@ -291,6 +189,35 @@ public class ExtractOntology extends HttpServlet
 //		String cssLocation = "http://115.70.8.75/";
 //		String lang = "en";	// default
 //	}
+	
+	// call the OWLAPI and apply XSL transform with some post-process tidy
+	private String transform(String ontologyURL, PrintWriter out)
+	{
+		String result = "";
+		try 
+		{
+			log("Parsing ontology with OWLAPI.");
+		 	result = parseWithOWLAPI(ontologyURL);
+		} catch (OWLOntologyCreationException | OWLOntologyStorageException | TransformerException e) {
+			// TODO Auto-generated catch block
+		 	e.printStackTrace();
+		}
+		try 
+		{
+			 log("Applying XSLT.");
+		 	result = ApplyXSLT(result, ontologyURL);
+		} catch (TransformerException e) {
+		 	// TODO Auto-generated catch block
+		 	e.printStackTrace();
+		}
+		 
+		result = tidy(result);
+		   
+		// serve transformed content back to user
+		out.println(result);
+		 
+		return result;
+	}
 	
 	private String parseWithOWLAPI(String ontologyURL) throws OWLOntologyCreationException, OWLOntologyStorageException, TransformerException
 	{
@@ -336,8 +263,16 @@ public class ExtractOntology extends HttpServlet
 			// find the IRI
 			int start = result.indexOf("<dd>", IRISub) + 4;
 			int end = result.indexOf("</dd>");
-			String IRI = result.substring(start,  end);
-			IRI = IRI.trim(); // eliminated leading and trailing whitespace
+			String IRI = "";
+			try {
+				IRI = result.substring(start,  end);
+				IRI = IRI.trim(); // eliminated leading and trailing whitespace
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				log("IRI declaration missing, quitting assigning fragments.");
+				e.printStackTrace();
+				return result;
+			}
 			
 			// last index of d4e occurrence
 			int last = 0;
@@ -376,16 +311,16 @@ public class ExtractOntology extends HttpServlet
 						String fragmentHash = "\"#" + result.substring(startFrag + 1, endFrag) + "\"";
 						String fragment = "\"" + result.substring(startFrag + 1, endFrag) + "\"";
 						
+						// replace d4e with fragment name
+						result = result.replace(d4eHash, fragmentHash);
+						result = result.replace(d4e, fragment);
+						
 						System.out.println(d4e + " " + fragmentHash);
 					}
 				}
-				
 				last = end_d4e;
 			}
-			
 		}
-		
-		
 		return result;
 	}
 	
@@ -482,5 +417,41 @@ public class ExtractOntology extends HttpServlet
 	private String getErrorPage(Exception e) 
 	{
 		return "<html>" + "<head><title>LODE error</title></head>" + "<body>" + "<h2>" + "LODE error" + "</h2>" + "<p><strong>Reason: </strong>" + e.getMessage() + "</p>" + "</body>" + "</html>";
+	}
+	
+	private void loggerInit()
+	{
+		// initialise log4j
+		BasicConfigurator.configure();
+		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
+	}
+	
+	// convert InputStream to String
+	private static String getStringFromInputStream(InputStream is) 
+	{
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sb.toString();
 	}
 }

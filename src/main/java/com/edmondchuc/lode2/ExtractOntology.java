@@ -124,6 +124,10 @@ public class ExtractOntology extends HttpServlet
 	boolean closure = false;
 	boolean reasoner = false;
 	
+	// was it a HTTP request over URL?
+	// sets to false in doPost()
+	boolean urlCall = true;
+	
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -159,8 +163,13 @@ public class ExtractOntology extends HttpServlet
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
+		lang = request.getParameter("lang_label");
+		if(lang.equals(""))
+		{
+			lang = "en";
+		}
 		log("Parameters:");
-		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner);
+		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang);
 		
 		// flag to prevent tidy() being called twice if request is URL
 		// don't really like this implementation but it will do for now
@@ -221,6 +230,7 @@ public class ExtractOntology extends HttpServlet
 		{
 			log("Received URL, passing on to doGet().");
 			isFile = false;
+			urlCall = false;
 			doGet(request, response);
 		}
 	}
@@ -237,6 +247,17 @@ public class ExtractOntology extends HttpServlet
 		
 		// set UTF-8 as response encoding
 		response.setCharacterEncoding("UTF-8");
+		
+		// get parameters
+		if(urlCall)
+		{
+			imported = new Boolean(request.getParameter("imported"));
+			closure = new Boolean(request.getParameter("closure"));
+			reasoner = new Boolean(request.getParameter("reasoner"));
+			lang = request.getParameter("lang");
+			log("Parameters:");
+			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang);
+		}
 		
 		// object to send the HTML response back to client
 		PrintWriter out = response.getWriter();

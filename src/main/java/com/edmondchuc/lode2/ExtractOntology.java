@@ -5,17 +5,24 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -27,10 +34,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -40,13 +50,50 @@ import org.jsoup.nodes.Document;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.StringDocumentTarget;
+import org.semanticweb.owlapi.model.AddImport;
+import org.semanticweb.owlapi.model.AddOntologyAnnotation;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAnnotationSubject;
+import org.semanticweb.owlapi.model.OWLAxiom;
+import org.semanticweb.owlapi.model.OWLAxiomIndex;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDatatype;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLImportsDeclaration;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
+import org.semanticweb.owlapi.util.InferredAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredClassAssertionAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredDisjointClassesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentClassAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentDataPropertiesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentObjectPropertyAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredInverseObjectPropertiesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredOntologyGenerator;
+import org.semanticweb.owlapi.util.InferredPropertyAssertionGenerator;
+import org.semanticweb.owlapi.util.InferredSubClassAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredSubDataPropertyAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredSubObjectPropertyAxiomGenerator;
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+import org.mindswap.pellet.PelletOptions;
+import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
+import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
 @MultipartConfig
 (/*location="C:\\Users\\chu101\\Desktop\\tmp",*/
@@ -480,12 +527,12 @@ public class ExtractOntology extends HttpServlet
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = (Document) builder.parse(new ByteArrayInputStream(result.getBytes()));
 
-			NodeList ontologies = document.getElementsByTagNameNS("http://www.w3.org/2002/07/owl#", "Ontology");
+			NodeList ontologies = ((org.w3c.dom.Document) document).getElementsByTagNameNS("http://www.w3.org/2002/07/owl#", "Ontology");
 			if (ontologies.getLength() > 0) {
 				Element ontology = (Element) ontologies.item(0);
 
 				for (String toBeAdded : removed) {
-					Element importElement = document.createElementNS("http://www.w3.org/2002/07/owl#", "owl:imports");
+					Element importElement = ((org.w3c.dom.Document) document).createElementNS("http://www.w3.org/2002/07/owl#", "owl:imports");
 					importElement.setAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:resource", toBeAdded);
 					ontology.appendChild(importElement);
 				}
@@ -493,7 +540,7 @@ public class ExtractOntology extends HttpServlet
 
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			StreamResult output = new StreamResult(new StringWriter());
-			DOMSource source = new DOMSource(document);
+			DOMSource source = new DOMSource((Node) document);
 			transformer.transform(source, output);
 
 			return output.getWriter().toString();
@@ -509,6 +556,99 @@ public class ExtractOntology extends HttpServlet
 			return result;
 		} catch (TransformerException e) {
 			return result;
+		}
+	}
+	
+	private OWLOntology parseWithReasoner(OWLOntologyManager manager, OWLOntology ontology) {
+		try {
+			PelletOptions.load(new URL("http://" + cssLocation + "pellet.properties"));
+			PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
+			reasoner.getKB().prepare();
+			List<InferredAxiomGenerator<? extends OWLAxiom>> generators = new ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
+			generators.add(new InferredSubClassAxiomGenerator());
+			generators.add(new InferredClassAssertionAxiomGenerator());
+			generators.add(new InferredDisjointClassesAxiomGenerator());
+			generators.add(new InferredEquivalentClassAxiomGenerator());
+			generators.add(new InferredEquivalentDataPropertiesAxiomGenerator());
+			generators.add(new InferredEquivalentObjectPropertyAxiomGenerator());
+			generators.add(new InferredInverseObjectPropertiesAxiomGenerator());
+			generators.add(new InferredPropertyAssertionGenerator());
+			generators.add(new InferredSubDataPropertyAxiomGenerator());
+			generators.add(new InferredSubObjectPropertyAxiomGenerator());
+
+			InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, generators);
+
+			OWLOntologyID id = ontology.getOntologyID();
+			Set<OWLImportsDeclaration> declarations = ontology.getImportsDeclarations();
+			Set<OWLAnnotation> annotations = ontology.getAnnotations();
+
+			Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations = new HashMap<OWLEntity, Set<OWLAnnotationAssertionAxiom>>();
+			for (OWLClass aEntity : ontology.getClassesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLObjectProperty aEntity : ontology.getObjectPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLDataProperty aEntity : ontology.getDataPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLNamedIndividual aEntity : ontology.getIndividualsInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLAnnotationProperty aEntity : ontology.getAnnotationPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLDatatype aEntity : ontology.getDatatypesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+
+			manager.removeOntology(ontology);
+			OWLOntology inferred = manager.createOntology(id);
+			iog.fillOntology((OWLDataFactory) manager, inferred);
+
+			for (OWLImportsDeclaration decl : declarations) {
+				manager.applyChange(new AddImport(inferred, decl));
+			}
+			for (OWLAnnotation ann : annotations) {
+				manager.applyChange(new AddOntologyAnnotation(inferred, ann));
+			}
+			for (OWLClass aEntity : inferred.getClassesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLObjectProperty aEntity : inferred.getObjectPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLDataProperty aEntity : inferred.getDataPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLNamedIndividual aEntity : inferred.getIndividualsInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLAnnotationProperty aEntity : inferred.getAnnotationPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLDatatype aEntity : inferred.getDatatypesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+
+			return inferred;
+		} catch (FileNotFoundException e1) {
+			return ontology;
+		} catch (MalformedURLException e1) {
+			return ontology;
+		} catch (IOException e1) {
+			return ontology;
+		} catch (OWLOntologyCreationException e) {
+			return ontology;
+		}
+	}
+	
+	private void applyAnnotations(OWLEntity aEntity, Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations, OWLOntologyManager manager, OWLOntology ontology) {
+		Set<OWLAnnotationAssertionAxiom> entitySet = entityAnnotations.get(aEntity);
+		if (entitySet != null) {
+			for (OWLAnnotationAssertionAxiom ann : entitySet) {
+				manager.addAxiom(ontology, ann);
+			}
 		}
 	}
 }

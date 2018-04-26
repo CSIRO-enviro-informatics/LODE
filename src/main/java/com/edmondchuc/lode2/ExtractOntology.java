@@ -2,6 +2,7 @@ package com.edmondchuc.lode2;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -23,6 +25,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -87,6 +91,20 @@ public class ExtractOntology extends HttpServlet
 		// TODO: have a safety check to ensure user only uploads one file
 		// get the file part of the request
 		Part filePart = request.getPart("file"); 
+		
+		// get parameters
+		boolean imported = new Boolean(request.getParameter("module").equals("imported"));
+		boolean closure = new Boolean(request.getParameter("module").equals("closure"));
+		boolean reasoner = false;
+		// try catch block required to prevent NullPointerException when checkbox is unticked
+		try {
+			reasoner = request.getParameter("reasoner").equals("reasoner");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		log("Parameters:");
+		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner);
 		
 		// flag to prevent tidy() being called twice if request is URL
 		// don't really like this implementation but it will do for now
@@ -453,5 +471,44 @@ public class ExtractOntology extends HttpServlet
 		}
 
 		return sb.toString();
+	}
+	
+	private String addImportedAxioms(String result, List<String> removed) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		factory.setNamespaceAware(true);
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = (Document) builder.parse(new ByteArrayInputStream(result.getBytes()));
+
+			NodeList ontologies = document.getElementsByTagNameNS("http://www.w3.org/2002/07/owl#", "Ontology");
+			if (ontologies.getLength() > 0) {
+				Element ontology = (Element) ontologies.item(0);
+
+				for (String toBeAdded : removed) {
+					Element importElement = document.createElementNS("http://www.w3.org/2002/07/owl#", "owl:imports");
+					importElement.setAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf:resource", toBeAdded);
+					ontology.appendChild(importElement);
+				}
+			}
+
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			StreamResult output = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(document);
+			transformer.transform(source, output);
+
+			return output.getWriter().toString();
+		} catch (ParserConfigurationException e) {
+			return result;
+		} catch (SAXException e) {
+			return result;
+		} catch (IOException e) {
+			return result;
+		} catch (TransformerConfigurationException e) {
+			return result;
+		} catch (TransformerFactoryConfigurationError e) {
+			return result;
+		} catch (TransformerException e) {
+			return result;
+		}
 	}
 }

@@ -26,8 +26,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:f="http://www.essepuntato.it/xslt/function"
-    xmlns:dcterms="http://purl.org/dc/terms/"
-    xmlns="http://www.w3.org/1999/xhtml">
+    xmlns:dcterms="http://purl.org/dc/terms/">
+    <!-- xmlns="http://www.w3.org/1999/xhtml"> -->
      
     <xsl:include href="swrl-module.xsl" />
     <xsl:include href="common-functions.xsl"/>
@@ -91,7 +91,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     
     <xsl:template match="rdf:RDF">
  	<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
-        <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+        <html lang="en">
             <xsl:choose>
                 <xsl:when test="owl:Ontology">
                     <xsl:apply-templates select="owl:Ontology" />

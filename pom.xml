@@ -53,11 +53,13 @@
 		<artifactId>pellet-el</artifactId>
 		<version>2.3.6-ansell</version>
 	</dependency>
+	<!-- TODO: OVERRIDES NEWER OWLAPI IMPORT.
 	<dependency>
 		<groupId>com.github.ansell.pellet</groupId>
 		<artifactId>pellet-owlapiv3</artifactId>
 		<version>2.3.6-ansell</version>
 	</dependency>
+	-->
 	<dependency>
 		<groupId>com.github.ansell.pellet</groupId>
 		<artifactId>pellet-rules</artifactId>

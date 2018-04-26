@@ -7,7 +7,12 @@ Description: The landing page of the modified LODE service.
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>LODE 2</title>
+		<link href="http://pid.data.gov.au/websrv/static/LODE/extra.css" rel="stylesheet" type="text/css">
+	</head>
    <body>
       <h1>LODE 2</h1>
       <p>Enter URL of ontology or upload a file.</p>
@@ -27,20 +32,29 @@ Description: The landing page of the modified LODE service.
                      <input type="radio" name="module" value="closure" /> <span class="text">OWLAPI + Closure</span>
                   </span>
                </span><br/><br/>
-               <input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> <span class="reasoner">Use the reasoner</span><br/><br/>
-               <!-- <span class="lang noWrap">
+               <input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> <span class="reasoner">Use the reasoner (not working in LODE 2.0 due to Pellet using old OWLAPI)</span><br/><br/>
+               <span class="lang noWrap">
                   <label for="number">Language</label>:
                   <input id="number" type="text" name="lang_label" value="" placeholder="'en' if empty" />
-               </span> -->
+               </span>
             </div>
       </form>
-      <br>
-      <br>
       <h2>Examples</h2>
-      <b>URLs:</b><br>
-      Agreements Ontology 	- https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl<br>
-      Pizza Ontology 		- https://protege.stanford.edu/ontologies/pizza/pizza.owl<br>
-      FOAF Ontology 		- http://xmlns.com/foaf/spec/20140114.rdf<br>
+      Agreements Ontology 	- <blockquote><pre>https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote><br>
+      Pizza Ontology 		- <blockquote><pre>https://protege.stanford.edu/ontologies/pizza/pizza.owl</pre></blockquote><br>
+      FOAF Ontology 		- <blockquote><pre>http://xmlns.com/foaf/spec/20140114.rdf</pre></blockquote><br>
+      <h2>Call the LODE service</h2>
+      Example:
       <br>
+      For now...
+      <br>
+      <blockquote><pre>http://52.64.97.55/extract?imported=true&lang=it&url=https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote>
+      <br>
+      For the future...
+      <br>
+      <blockquote><pre>http://lode2.promsns.org/extract?import=true&lang=it&url=https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote>
    </body>
+   <footer>
+   	  <p class="endnote"><a href="http://lode2.promsns.org">LODE 2</a>, <em>Live OWL Documentation Environment, v2</em>, originally developed as LODE by <a href="http://www.essepuntato.it">Silvio Peroni</a> and updated by <a href="http://www.edmondchuc.com">Edmond Chuc</a> at the <a href="https://www.csiro.au">CSIRO</a>.</p>
+   </footer>
 </html>

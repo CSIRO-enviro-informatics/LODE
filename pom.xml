@@ -16,6 +16,54 @@
 
   <dependencies>
   
+  	<!-- aterm -->
+	<dependency>
+		<groupId>com.github.ansell.aterms</groupId>
+		<artifactId>aterm-java</artifactId>
+		<version>1.8.2</version>
+	</dependency>
+	
+	<!-- saxon-he -->
+	<dependency>
+		<groupId>net.sf.saxon</groupId>
+		<artifactId>Saxon-HE</artifactId>
+		<version>9.5.1-6</version>
+	</dependency>
+	
+	<!-- jgrapht (jdk 1.5) -->
+	<dependency>
+		<groupId>org.jgrapht</groupId>
+		<artifactId>jgrapht-jdk1.5</artifactId>
+		<version>0.7.3</version>
+	</dependency>
+	
+	<!-- pellet -->
+	<dependency>
+		<groupId>com.github.ansell.pellet</groupId>
+		<artifactId>pellet-core</artifactId>
+		<version>2.3.6-ansell</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.ansell.pellet</groupId>
+		<artifactId>pellet-datatypes</artifactId>
+		<version>2.3.6-ansell</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.ansell.pellet</groupId>
+		<artifactId>pellet-el</artifactId>
+		<version>2.3.6-ansell</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.ansell.pellet</groupId>
+		<artifactId>pellet-owlapiv3</artifactId>
+		<version>2.3.6-ansell</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.ansell.pellet</groupId>
+		<artifactId>pellet-rules</artifactId>
+		<version>2.3.6-ansell</version>
+	</dependency>
+  
   	<!-- Servlet API -->
     <dependency>
       <groupId>javax.servlet</groupId>

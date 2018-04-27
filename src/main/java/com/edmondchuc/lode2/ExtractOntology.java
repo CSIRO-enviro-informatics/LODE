@@ -113,7 +113,7 @@ public class ExtractOntology extends HttpServlet
 	// set up upload path - info from	
 	// https://stackoverflow.com/questions/797549/get-login-username-in-java   
 	// may need to change for Windows support in the future
-	String username = System.getProperty("user.name");
+	String username = System.getProperty("user.name"); //"ubuntu";
 	
 	// settings (point them to server when deploying)
 	String xsltURL = "http://localhost:8080/extraction.xsl"; //"http://52.64.97.55:80/extraction.xsl";

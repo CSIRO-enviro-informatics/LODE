@@ -9,7 +9,6 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-
   <servlet>
     <servlet-name>ExtractOntology</servlet-name>
     <servlet-class>com.edmondchuc.lode2.ExtractOntology</servlet-class>
@@ -18,7 +17,7 @@
     <servlet-name>ExtractOntology</servlet-name>
     <url-pattern>/extract</url-pattern>
   </servlet-mapping>
-
+  
   <servlet>
     <servlet-name>GetSource</servlet-name>
     <servlet-class>com.edmondchuc.lode2.GetSource</servlet-class>
@@ -27,6 +26,13 @@
     <servlet-name>GetSource</servlet-name>
     <url-pattern>/source</url-pattern>
   </servlet-mapping>
-
-
+  
+  <servlet>
+  	<servlet-name>Add</servlet-name>
+  	<servlet-class>com.edmondchuc.lode2.Add</servlet-class>  
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>Add</servlet-name>
+  	<url-pattern>/add</url-pattern>
+  </servlet-mapping>
 </web-app>

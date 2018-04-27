@@ -366,8 +366,29 @@ public class ExtractOntology extends HttpServlet
 			result = changeOtherVisualisation(result);
 		}
 		
+		log("Removing \"visualise it with LODE\" links");
+		result = removeVisualiseWithLode(result);
+		
 		log("Done.");
 		
+		return result;
+	}
+	
+	private String removeVisualiseWithLode(String result)
+	{
+		int last = 0;
+		while(result.indexOf("visualise it with LODE", last) != -1)
+		{
+			// get the line containing "visualise it with LODE"
+			int start = result.indexOf("visualise it with LODE", last);
+			start = result.lastIndexOf("(", start);
+			int end = result.indexOf(")", start) + 1;
+			String sub = result.substring(start, end);
+			
+			result = result.replace(sub, "");
+			
+			last = end;
+		}
 		return result;
 	}
 	

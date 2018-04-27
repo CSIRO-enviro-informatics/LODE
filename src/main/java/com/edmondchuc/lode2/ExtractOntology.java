@@ -16,6 +16,7 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -369,8 +371,59 @@ public class ExtractOntology extends HttpServlet
 		log("Removing \"visualise it with LODE\" links");
 		result = removeVisualiseWithLode(result);
 		
+		log("Removing bad namespaces");
+		result = removeBadNamespaces(result);
+		
 		log("Done.");
 		
+		return result;
+	}
+	
+	private String removeBadNamespaces(String result)
+	{
+		// get the directory of this application
+		String path = System.getProperty("user.dir");
+		
+		// path to the text document of namespaces
+		Path filePath = Paths.get(path + File.separator + "src/main/webapp/namespaces.txt");
+		
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(filePath);
+			
+			// find the default namespace section
+			int start = result.indexOf("<em>default namespace</em>");
+			
+			while(scanner.hasNext())
+			{
+				String namespace = scanner.next();
+				
+				int last = start;
+				// if this namespace exists in the ontology
+				while(result.indexOf(namespace, last) != -1)
+				{
+					// check if it matches exactly
+					int checkStart = result.indexOf(namespace, last);
+					int checkEnd = result.indexOf("\n", checkStart);
+					String checkString = result.substring(checkStart, checkEnd);
+					System.out.println("namespace: " + namespace + " checkString: " + checkString + " equals: " + namespace.equals(checkString));
+				
+					// remove if they equal absolutely
+					if(namespace.equals(checkString))
+					{
+						checkStart = result.lastIndexOf("<dt>", checkStart) - 1;
+						checkEnd = result.indexOf("</dd>", checkEnd) + 5;
+						String sub = result.substring(checkStart, checkEnd);
+						
+						result = result.replace(sub, "");
+					}
+					last = checkEnd;
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return result;
 	}
 	

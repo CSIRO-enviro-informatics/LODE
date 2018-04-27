@@ -359,7 +359,28 @@ public class ExtractOntology extends HttpServlet
 		log("Assigning fragments.");
 		result = assignFragments(result);
 		
+		log("Removing \"Other visualisation\".");
+		result = removeOtherVisualisation(result);
+		
 		log("Done.");
+		
+		return result;
+	}
+	
+	private String removeOtherVisualisation(String result)
+	{
+		// get the root tag containing Other visualisation
+		int start = result.indexOf("Other visualisation:");
+		start = result.lastIndexOf("</dl>", start) + 5;
+		
+		// get the index of the closing tag containing Other visualisation
+		int end = result.indexOf("</dl>", start) + 5;
+		
+		// form the substring
+		String chunk = result.substring(start, end);
+		
+		// remove this chunk from the HTML string
+		result = result.replace(chunk, "");
 		
 		return result;
 	}

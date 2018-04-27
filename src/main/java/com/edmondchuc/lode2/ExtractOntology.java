@@ -119,6 +119,13 @@ public class ExtractOntology extends HttpServlet
 	String uploadedFilePath = "http://localhost:8080/uploadedFiles/";
 	String lang = "en";	// default
 	
+	// flag to prevent tidy() being called twice if request is URL
+	// don't really like this implementation but it will do for now
+	boolean isFile = false;
+	
+	// used to change the href of "Other visualisation"
+	String filename = null;
+	
 	// parameters
 	boolean imported = false;
 	boolean closure = false;
@@ -170,12 +177,6 @@ public class ExtractOntology extends HttpServlet
 		}
 		log("Parameters:");
 		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang);
-		
-		// flag to prevent tidy() being called twice if request is URL
-		// don't really like this implementation but it will do for now
-		boolean isFile = false;
-		
-		String filename = null;
 		
 		// get header type
 		String header = filePart.getHeader("content-disposition");
@@ -359,28 +360,31 @@ public class ExtractOntology extends HttpServlet
 		log("Assigning fragments.");
 		result = assignFragments(result);
 		
-		log("Removing \"Other visualisation\".");
-		result = removeOtherVisualisation(result);
+		if(isFile)
+		{
+			log("Changing \"Other visualisation\" server address.");
+			result = changeOtherVisualisation(result);
+		}
 		
 		log("Done.");
 		
 		return result;
 	}
 	
-	private String removeOtherVisualisation(String result)
+	private String changeOtherVisualisation(String result)
 	{
 		// get the root tag containing Other visualisation
 		int start = result.indexOf("Other visualisation:");
-		start = result.lastIndexOf("</dl>", start) + 5;
 		
-		// get the index of the closing tag containing Other visualisation
-		int end = result.indexOf("</dl>", start) + 5;
+		// find the start of href value including the double quote
+		start = result.indexOf("href=", start) + 6;
+		int end = result.indexOf(filename, start);
 		
-		// form the substring
-		String chunk = result.substring(start, end);
+		// get the substring to be replaced
+		String sub = result.substring(start, end);
 		
-		// remove this chunk from the HTML string
-		result = result.replace(chunk, "");
+		// replace sub with the complete path URL
+		result = result.replace(sub, uploadedFilePath);
 		
 		return result;
 	}

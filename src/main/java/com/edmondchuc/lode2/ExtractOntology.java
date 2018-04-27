@@ -438,13 +438,70 @@ public class ExtractOntology extends HttpServlet
 	
 	private String formatHTML(String result)
 	{
+		// store the unparsed HTML in String original
+		String original = result;
+		
 		// format HTML with Jsoup
 		Document doc = Jsoup.parse(result);
 		
 		// set indentation to 4 spaces
 		doc.outputSettings().indentAmount(4); 
 		
-		return doc.toString();
+		// result of parsed HTML
+		result = doc.toString();
+		
+		// keep track of index in HTML
+		int last = 0;
+		
+		// Loops through the parsed HTML and finds all text contained inside
+		// a <span> with class="markdown". 
+		// Replaces the text inside this <span> with the original text to maintain markdown formatting.
+		while(result.indexOf("class=\"markdown\"", last) != -1)
+		{
+			// find the first occurence of <span> text with class="markdown"
+			int start = result.indexOf("class=\"markdown\"", last) + 17;
+			
+			// finds the end of the current line using full stop.
+			int endLine = result.indexOf(".", start) + 1;
+			
+			// finds the end of the text contained in <span>
+			int end = result.indexOf("</span>", start);
+			
+			// form a line to match the original unparsed HTML
+			String line = result.substring(start, endLine);
+			
+			// If this line contains </span>, then the ontology creator didnt
+			// end the sentence with a full stop. Find the closing span tag.
+			// This assumes that this text contains no newlines.
+			if(line.contains("</span>"))
+			{
+				// form the new line
+				endLine = result.indexOf("</span>", start);
+				line = result.substring(start, endLine);
+			}
+			
+			// get the original chunk of text by using line as a match
+			String chunk = result.substring(start, end);
+			int origStart = original.indexOf(line);
+			int origEnd = original.indexOf("</span>", origStart);
+			
+			// error check, allow the method to continue
+			// (an instance in the foaf ontology would return false
+			//  even though the text exists)
+			String origLine = "";
+			try {
+				origLine = original.substring(origStart, origEnd);
+				
+				// only modify the result if chunk is found
+				result = result.replace(chunk, origLine);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// update last, which keeps track of where we are in the document
+			last = end;
+		}
+		return result;
 	}
 	
 	/*

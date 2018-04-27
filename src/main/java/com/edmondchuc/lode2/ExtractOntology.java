@@ -386,6 +386,7 @@ public class ExtractOntology extends HttpServlet
 		
 		// path to the text document of namespaces
 		Path filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
+		//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
 		
 		Scanner scanner = null;
 		try {

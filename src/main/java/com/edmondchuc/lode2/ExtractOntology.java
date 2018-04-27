@@ -116,9 +116,9 @@ public class ExtractOntology extends HttpServlet
 	String username = System.getProperty("user.name");
 	
 	// settings (point them to server when deploying)
-	String xsltURL = "http://localhost:8080/extraction.xsl";
-	String cssLocation = "http://localhost:8080/";
-	String uploadedFilePath = "http://localhost:8080/uploadedFiles/";
+	String xsltURL = "http://localhost:8080/extraction.xsl"; //"http://52.64.97.55:80/extraction.xsl";
+	String cssLocation = "http://localhost:8080/"; //"http://52.64.97.55:80/";
+	String uploadedFilePath = "http://localhost:8080/uploadedFiles/"; //"http://52.64.97.55:80/uploadedFiles/";
 	String lang = "en";	// default
 	
 	// flag to prevent tidy() being called twice if request is URL
@@ -385,7 +385,7 @@ public class ExtractOntology extends HttpServlet
 		String path = System.getProperty("user.dir");
 		
 		// path to the text document of namespaces
-		Path filePath = Paths.get(path + File.separator + "src/main/webapp/namespaces.txt");
+		Path filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
 		
 		Scanner scanner = null;
 		try {

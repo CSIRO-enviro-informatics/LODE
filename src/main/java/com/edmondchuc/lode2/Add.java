@@ -41,8 +41,10 @@ public class Add extends HttpServlet {
 		// get the directory of this application
 		String path = System.getProperty("user.dir");
 		
+		String username = System.getProperty("user.name");
+		
 		// path to the text document of namespaces
-		String filePath = Paths.get(path + File.separator + "src/main/webapp/namespaces.txt").toString();
+		String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
 	
 		FileWriter fileWriter = new FileWriter(filePath, true);
 		

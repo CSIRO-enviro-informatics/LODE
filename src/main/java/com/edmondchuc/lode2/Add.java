@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
@@ -44,7 +45,8 @@ public class Add extends HttpServlet {
 		String username = System.getProperty("user.name"); //"ubuntu";
 		
 		// path to the text document of namespaces
-		String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+		//String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+		String filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
 		//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
 		
 		FileWriter fileWriter = new FileWriter(filePath, true);
@@ -56,6 +58,8 @@ public class Add extends HttpServlet {
 		bufferedWriter.close();
 		log("Namespace " + namespace + " added to namespace.txt.");
 		
+		PrintWriter out = response.getWriter();
+		out.println("Added namespace: " + namespace);
 	}
 
 	/**

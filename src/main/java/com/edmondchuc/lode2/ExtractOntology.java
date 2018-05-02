@@ -50,6 +50,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.BasicConfigurator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.mindswap.pellet.PelletOptions;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.RDFXMLDocumentFormat;
 import org.semanticweb.owlapi.io.StringDocumentTarget;
@@ -91,6 +92,10 @@ import org.slf4j.Logger;
 import org.slf4j.event.Level;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import openllet.owlapi.PelletReasoner;
+import openllet.owlapi.PelletReasonerFactory;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 //
@@ -337,10 +342,11 @@ public class ExtractOntology extends HttpServlet
 			}
 		}
 		
-//		if (reasoner) 
-//		{
-//			ontology = parseWithReasoner(manager, ontology);
-//		}
+		if (reasoner) 
+		{
+			log("Parsing with Pellet reasoner.");
+			ontology = parseWithReasoner(manager, ontology);
+		}
 		
 		// document to store ontology parsed by OWLAPI
 		StringDocumentTarget parsedOntology = new StringDocumentTarget();
@@ -385,7 +391,8 @@ public class ExtractOntology extends HttpServlet
 		String path = System.getProperty("user.dir");
 		
 		// path to the text document of namespaces
-		Path filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
+		//Path filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
+		Path filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
 		//Path filePath = Paths.get("/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt");
 		
 		Scanner scanner = null;
@@ -732,89 +739,89 @@ public class ExtractOntology extends HttpServlet
 		}
 	}
 	
-//	private OWLOntology parseWithReasoner(OWLOntologyManager manager, OWLOntology ontology) {
-//		try {
-//			PelletOptions.load(new URL("http://" + cssLocation + "pellet.properties"));
-//			PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
-//			reasoner.getKB().prepare();
-//			List<InferredAxiomGenerator<? extends OWLAxiom>> generators = new ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
-//			generators.add(new InferredSubClassAxiomGenerator());
-//			generators.add(new InferredClassAssertionAxiomGenerator());
-//			generators.add(new InferredDisjointClassesAxiomGenerator());
-//			generators.add(new InferredEquivalentClassAxiomGenerator());
-//			generators.add(new InferredEquivalentDataPropertiesAxiomGenerator());
-//			generators.add(new InferredEquivalentObjectPropertyAxiomGenerator());
-//			generators.add(new InferredInverseObjectPropertiesAxiomGenerator());
-//			generators.add(new InferredPropertyAssertionGenerator());
-//			generators.add(new InferredSubDataPropertyAxiomGenerator());
-//			generators.add(new InferredSubObjectPropertyAxiomGenerator());
-//
-//			InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, generators);
-//
-//			OWLOntologyID id = ontology.getOntologyID();
-//			Set<OWLImportsDeclaration> declarations = ontology.getImportsDeclarations();
-//			Set<OWLAnnotation> annotations = ontology.getAnnotations();
-//
-//			Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations = new HashMap<OWLEntity, Set<OWLAnnotationAssertionAxiom>>();
-//			for (OWLClass aEntity : ontology.getClassesInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//			for (OWLObjectProperty aEntity : ontology.getObjectPropertiesInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//			for (OWLDataProperty aEntity : ontology.getDataPropertiesInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//			for (OWLNamedIndividual aEntity : ontology.getIndividualsInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//			for (OWLAnnotationProperty aEntity : ontology.getAnnotationPropertiesInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//			for (OWLDatatype aEntity : ontology.getDatatypesInSignature()) {
-//				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
-//			}
-//
-//			manager.removeOntology(ontology);
-//			OWLOntology inferred = manager.createOntology(id);
-//			iog.fillOntology((OWLDataFactory) manager, inferred);
-//
-//			for (OWLImportsDeclaration decl : declarations) {
-//				manager.applyChange(new AddImport(inferred, decl));
-//			}
-//			for (OWLAnnotation ann : annotations) {
-//				manager.applyChange(new AddOntologyAnnotation(inferred, ann));
-//			}
-//			for (OWLClass aEntity : inferred.getClassesInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//			for (OWLObjectProperty aEntity : inferred.getObjectPropertiesInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//			for (OWLDataProperty aEntity : inferred.getDataPropertiesInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//			for (OWLNamedIndividual aEntity : inferred.getIndividualsInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//			for (OWLAnnotationProperty aEntity : inferred.getAnnotationPropertiesInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//			for (OWLDatatype aEntity : inferred.getDatatypesInSignature()) {
-//				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
-//			}
-//
-//			return inferred;
-//		} catch (FileNotFoundException e1) {
-//			return ontology;
-//		} catch (MalformedURLException e1) {
-//			return ontology;
-//		} catch (IOException e1) {
-//			return ontology;
-//		} catch (OWLOntologyCreationException e) {
-//			return ontology;
-//		}
-//	}
+	private OWLOntology parseWithReasoner(OWLOntologyManager manager, OWLOntology ontology) {
+		try {
+			PelletOptions.load(new URL("http://" + cssLocation + "pellet.properties"));
+			PelletReasoner reasoner = (PelletReasoner) PelletReasonerFactory.getInstance().createReasoner(ontology);
+			reasoner.getKB().prepare();
+			List<InferredAxiomGenerator<? extends OWLAxiom>> generators = new ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
+			generators.add(new InferredSubClassAxiomGenerator());
+			generators.add(new InferredClassAssertionAxiomGenerator());
+			generators.add(new InferredDisjointClassesAxiomGenerator());
+			generators.add(new InferredEquivalentClassAxiomGenerator());
+			generators.add(new InferredEquivalentDataPropertiesAxiomGenerator());
+			generators.add(new InferredEquivalentObjectPropertyAxiomGenerator());
+			generators.add(new InferredInverseObjectPropertiesAxiomGenerator());
+			generators.add(new InferredPropertyAssertionGenerator());
+			generators.add(new InferredSubDataPropertyAxiomGenerator());
+			generators.add(new InferredSubObjectPropertyAxiomGenerator());
+
+			InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, generators);
+
+			OWLOntologyID id = ontology.getOntologyID();
+			Set<OWLImportsDeclaration> declarations = ontology.getImportsDeclarations();
+			Set<OWLAnnotation> annotations = ontology.getAnnotations();
+
+			Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations = new HashMap<OWLEntity, Set<OWLAnnotationAssertionAxiom>>();
+			for (OWLClass aEntity : ontology.getClassesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLObjectProperty aEntity : ontology.getObjectPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLDataProperty aEntity : ontology.getDataPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLNamedIndividual aEntity : ontology.getIndividualsInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLAnnotationProperty aEntity : ontology.getAnnotationPropertiesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+			for (OWLDatatype aEntity : ontology.getDatatypesInSignature()) {
+				entityAnnotations.put(aEntity, ((OWLAxiomIndex) aEntity).getAnnotationAssertionAxioms((OWLAnnotationSubject) ontology));
+			}
+
+			manager.removeOntology(ontology);
+			OWLOntology inferred = manager.createOntology(id);
+			iog.fillOntology((OWLDataFactory) manager, inferred);
+
+			for (OWLImportsDeclaration decl : declarations) {
+				manager.applyChange(new AddImport(inferred, decl));
+			}
+			for (OWLAnnotation ann : annotations) {
+				manager.applyChange(new AddOntologyAnnotation(inferred, ann));
+			}
+			for (OWLClass aEntity : inferred.getClassesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLObjectProperty aEntity : inferred.getObjectPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLDataProperty aEntity : inferred.getDataPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLNamedIndividual aEntity : inferred.getIndividualsInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLAnnotationProperty aEntity : inferred.getAnnotationPropertiesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+			for (OWLDatatype aEntity : inferred.getDatatypesInSignature()) {
+				applyAnnotations(aEntity, entityAnnotations, manager, inferred);
+			}
+
+			return inferred;
+		} catch (FileNotFoundException e1) {
+			return ontology;
+		} catch (MalformedURLException e1) {
+			return ontology;
+		} catch (IOException e1) {
+			return ontology;
+		} catch (OWLOntologyCreationException e) {
+			return ontology;
+		}
+	}
 	
 	private void applyAnnotations(OWLEntity aEntity, Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations, OWLOntologyManager manager, OWLOntology ontology) {
 		Set<OWLAnnotationAssertionAxiom> entitySet = entityAnnotations.get(aEntity);

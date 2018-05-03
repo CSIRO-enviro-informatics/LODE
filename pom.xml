@@ -15,6 +15,12 @@
   </properties>
 
   <dependencies>
+  	<!-- OWL2VOWL -->
+  	<dependency>
+    	<groupId>org.visualdataweb.vowl.owl2vowl</groupId>
+    	<artifactId>OWL2VOWL</artifactId>
+    	<version>0.3.1</version>
+	</dependency>
   
   	<!-- aterm -->
 	<dependency>

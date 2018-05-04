@@ -125,6 +125,7 @@ public class ExtractOntology extends HttpServlet
 	String cssLocation = "http://localhost:8080/"; //"http://52.64.97.55:80/";
 	String uploadedFilePath = "http://localhost:8080/uploadedFiles/"; //"http://52.64.97.55:80/uploadedFiles/";
 	String lang = "en";	// default
+	String webvowlAdd = "http://52.64.97.55:8080/";
 	
 	// flag to prevent tidy() being called twice if request is URL
 	// don't really like this implementation but it will do for now
@@ -321,7 +322,7 @@ public class ExtractOntology extends HttpServlet
 		 	e.printStackTrace();
 		}
 		 
-		result = tidy(result);
+		result = tidy(result, ontologyURL);
 		   
 		// serve transformed content back to user
 		out.println(result);
@@ -371,10 +372,16 @@ public class ExtractOntology extends HttpServlet
 		return parsedOntology.toString();
 	}
 	
-	private String tidy(String result)
+	private String tidy(String result, String ontologyURL)
 	{
 		log("Removing double titles");
 		result = removeDuplicateTitle(result);
+		
+		if(webvowl)
+		{
+			log("Embedding WebVOWL.");
+			result = embedWebVOWL(result, ontologyURL);
+		}
 		
 		log("Formatting HTML.");
 		result = formatHTML(result);
@@ -395,6 +402,26 @@ public class ExtractOntology extends HttpServlet
 		result = removeBadNamespaces(result);
 		
 		log("Done.");
+		
+		return result;
+	}
+	
+	private String embedWebVOWL(String result, String ontologyURL)
+	{
+		// find the open div tag of table of contents
+		int open = result.indexOf("<div id=\"toc\">");
+		
+		// find the closing div tag
+		int close = result.indexOf("</div>", open) + 6;
+		
+		// substring to insert for webvowl
+		String webvowlString = "\n<iframe src=\"" + webvowlAdd + "#iri=" + ontologyURL + "\" height=\"700\" width=\"100%\">Sorry your browser does not support iframe.</iframe>";
+		
+		// length of the result
+		int length = result.length();
+		
+		// insert webvowl substring
+		result = result.substring(0,  close).concat(webvowlString).concat(result.substring(close, length));
 		
 		return result;
 	}

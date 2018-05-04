@@ -137,6 +137,7 @@ public class ExtractOntology extends HttpServlet
 	boolean imported = false;
 	boolean closure = false;
 	boolean reasoner = false;
+	boolean webvowl = false;
 	
 	// was it a HTTP request over URL?
 	// sets to false in doPost()
@@ -170,9 +171,17 @@ public class ExtractOntology extends HttpServlet
 		imported = new Boolean(request.getParameter("module").equals("imported"));
 		closure = new Boolean(request.getParameter("module").equals("closure"));
 		reasoner = false;
+		webvowl = false;
+		try {
+			webvowl = request.getParameter("webvowl").equals("webvowl");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+		}
 		// try catch block required to prevent NullPointerException when checkbox is unticked
 		try {
 			reasoner = request.getParameter("reasoner").equals("reasoner");
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
@@ -183,8 +192,7 @@ public class ExtractOntology extends HttpServlet
 			lang = "en";
 		}
 		log("Parameters:");
-		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang);
-		
+		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl);
 		// get header type
 		String header = filePart.getHeader("content-disposition");
 		if(header.contains("filename=\"\""))
@@ -262,9 +270,10 @@ public class ExtractOntology extends HttpServlet
 			imported = new Boolean(request.getParameter("imported"));
 			closure = new Boolean(request.getParameter("closure"));
 			reasoner = new Boolean(request.getParameter("reasoner"));
+			webvowl = new Boolean(request.getParameter("webvowl"));
 			lang = request.getParameter("lang");
 			log("Parameters:");
-			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang);
+			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl);
 		}
 		
 		// object to send the HTML response back to client

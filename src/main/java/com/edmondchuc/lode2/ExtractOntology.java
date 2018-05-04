@@ -198,6 +198,7 @@ public class ExtractOntology extends HttpServlet
 		if(header.contains("filename=\"\""))
 		{
 			log("URL incoming");
+			isFile = false;
 		}
 		else
 		{

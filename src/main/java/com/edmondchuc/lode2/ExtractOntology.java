@@ -134,6 +134,7 @@ public class ExtractOntology extends HttpServlet
 	// used to change the href of "Other visualisation"
 	String filename = null;
 	
+	// NOTE: these values don't actually get initialised?
 	// parameters
 	boolean imported = false;
 	boolean closure = false;
@@ -142,7 +143,8 @@ public class ExtractOntology extends HttpServlet
 	
 	// was it a HTTP request over URL?
 	// sets to false in doPost()
-	boolean urlCall = true;
+	boolean httpCall = false;
+	boolean urlCall = false;
 	
 	private static final long serialVersionUID = 1L;
        
@@ -248,7 +250,7 @@ public class ExtractOntology extends HttpServlet
 		{
 			log("Received URL, passing on to doGet().");
 			isFile = false;
-			urlCall = false;
+			httpCall = false;
 			doGet(request, response);
 		}
 	}
@@ -266,8 +268,19 @@ public class ExtractOntology extends HttpServlet
 		// set UTF-8 as response encoding
 		response.setCharacterEncoding("UTF-8");
 		
+		// if http
+		if(urlCall == false && isFile == false)
+		{
+			httpCall = true;
+			log("http");
+		}
+		else
+		{
+			log("nope");
+		}
+		
 		// get parameters
-		if(urlCall)
+		if(httpCall)
 		{
 			imported = new Boolean(request.getParameter("imported"));
 			closure = new Boolean(request.getParameter("closure"));

@@ -272,6 +272,10 @@ public class ExtractOntology extends HttpServlet
 			reasoner = new Boolean(request.getParameter("reasoner"));
 			webvowl = new Boolean(request.getParameter("webvowl"));
 			lang = request.getParameter("lang");
+			if(lang == null)
+			{
+				lang = "en";
+			}
 			log("Parameters:");
 			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl);
 		}

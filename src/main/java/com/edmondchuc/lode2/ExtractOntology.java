@@ -454,7 +454,7 @@ public class ExtractOntology extends HttpServlet
 			scanner = new Scanner(filePath);
 			
 			// find the default namespace section
-			int start = result.indexOf("<em>default namespace</em>");
+			int start = result.indexOf("<div id=\"namespacedeclarations\"");
 			
 			while(scanner.hasNext())
 			{

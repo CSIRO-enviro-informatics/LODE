@@ -202,6 +202,7 @@ public class ExtractOntology extends HttpServlet
 		{
 			log("URL incoming");
 			isFile = false;
+			urlCall = true;
 		}
 		else
 		{

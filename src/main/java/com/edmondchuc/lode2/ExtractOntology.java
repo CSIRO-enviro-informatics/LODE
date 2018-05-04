@@ -542,7 +542,7 @@ public class ExtractOntology extends HttpServlet
 				IRI = IRI.trim(); // eliminated leading and trailing whitespace
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				log("IRI declaration missing, quitting assigning fragments.");
+				log("IRI declaration missing, quit assigning fragments.");
 				e.printStackTrace();
 				return result;
 			}

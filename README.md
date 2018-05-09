@@ -1,6 +1,6 @@
 ---
 
-<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/src/main/webapp/LODE_Image.png"/></p>
+<p align="center"><img src="https://imgur.com/kqAZtLn"/></p>
 
 ---
 

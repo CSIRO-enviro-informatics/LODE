@@ -5,7 +5,7 @@
 ---
 
 # Live OWL Documentation Environment (LODE)
-This repository is a Tomcat server application that can be used to create HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project has been updated by [Edmond Chuc](www.edmondchuc.com), a student at the [CSIRO](https://www.csiro.au/). 
+This repository is a Tomcat server application that can be used to create HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project has been updated by [Edmond Chuc](http://www.edmondchuc.com), a student at the [CSIRO](https://www.csiro.au/). 
 
 ---
 

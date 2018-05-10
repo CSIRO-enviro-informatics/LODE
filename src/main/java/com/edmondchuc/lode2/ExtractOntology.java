@@ -141,6 +141,7 @@ public class ExtractOntology extends HttpServlet
 	boolean reasoner = false;
 	boolean webvowl = false;
 	boolean badNamespaces = false;
+	boolean removeVisualiseWithLode = false;
 	
 	// was it a HTTP request over URL?
 	// sets to false in doPost()
@@ -177,6 +178,7 @@ public class ExtractOntology extends HttpServlet
 		reasoner = false;
 		webvowl = false;
 		badNamespaces = false;
+		removeVisualiseWithLode = false;
 		try {
 			webvowl = request.getParameter("webvowl").equals("webvowl");
 		} catch (Exception e1) {
@@ -197,13 +199,19 @@ public class ExtractOntology extends HttpServlet
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
+		try {
+			removeVisualiseWithLode = request.getParameter("removeVisualiseWithLode").equals("removeVisualiseWithLode");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
 		lang = request.getParameter("lang_label");
 		if(lang.equals(""))
 		{
 			lang = "en";
 		}
 		log("Parameters:");
-		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces);
+		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces + "\nremoveVisualiseWithLode: \t" + removeVisualiseWithLode);
 		// get header type
 		String header = filePart.getHeader("content-disposition");
 		if(header.contains("filename=\"\""))
@@ -281,11 +289,6 @@ public class ExtractOntology extends HttpServlet
 		if(urlCall == false && isFile == false)
 		{
 			httpCall = true;
-			
-		}
-		else
-		{
-			
 		}
 		
 		// get parameters
@@ -296,13 +299,14 @@ public class ExtractOntology extends HttpServlet
 			reasoner = new Boolean(request.getParameter("reasoner"));
 			webvowl = new Boolean(request.getParameter("webvowl"));
 			badNamespaces = new Boolean(request.getParameter("badNamespaces"));
+			removeVisualiseWithLode = new Boolean(request.getParameter("removeVisualiseWithLode"));
 			lang = request.getParameter("lang");
 			if(lang == null)
 			{
 				lang = "en";
 			}
 			log("Parameters:");
-			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces);
+			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces + "\nremoveVisualiseWithLode: \t" + removeVisualiseWithLode);
 		}
 		
 		// object to send the HTML response back to client

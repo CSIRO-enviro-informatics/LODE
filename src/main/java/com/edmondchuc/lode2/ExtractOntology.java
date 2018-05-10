@@ -140,6 +140,7 @@ public class ExtractOntology extends HttpServlet
 	boolean closure = false;
 	boolean reasoner = false;
 	boolean webvowl = false;
+	boolean badNamespaces = false;
 	
 	// was it a HTTP request over URL?
 	// sets to false in doPost()
@@ -175,6 +176,7 @@ public class ExtractOntology extends HttpServlet
 		closure = new Boolean(request.getParameter("module").equals("closure"));
 		reasoner = false;
 		webvowl = false;
+		badNamespaces = false;
 		try {
 			webvowl = request.getParameter("webvowl").equals("webvowl");
 		} catch (Exception e1) {
@@ -189,13 +191,19 @@ public class ExtractOntology extends HttpServlet
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
+		try {
+			badNamespaces = request.getParameter("badNamespaces").equals("badNamespaces");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
 		lang = request.getParameter("lang_label");
 		if(lang.equals(""))
 		{
 			lang = "en";
 		}
 		log("Parameters:");
-		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl);
+		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces);
 		// get header type
 		String header = filePart.getHeader("content-disposition");
 		if(header.contains("filename=\"\""))
@@ -273,11 +281,11 @@ public class ExtractOntology extends HttpServlet
 		if(urlCall == false && isFile == false)
 		{
 			httpCall = true;
-			log("http");
+			
 		}
 		else
 		{
-			log("nope");
+			
 		}
 		
 		// get parameters
@@ -287,13 +295,14 @@ public class ExtractOntology extends HttpServlet
 			closure = new Boolean(request.getParameter("closure"));
 			reasoner = new Boolean(request.getParameter("reasoner"));
 			webvowl = new Boolean(request.getParameter("webvowl"));
+			badNamespaces = new Boolean(request.getParameter("badNamespaces"));
 			lang = request.getParameter("lang");
 			if(lang == null)
 			{
 				lang = "en";
 			}
 			log("Parameters:");
-			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl);
+			System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces);
 		}
 		
 		// object to send the HTML response back to client
@@ -391,17 +400,20 @@ public class ExtractOntology extends HttpServlet
 		log("Removing double titles");
 		result = removeDuplicateTitle(result);
 		
+		if(imported == false && closure == false && reasoner == false)
+		{
+			log("Formatting HTML.");
+			result = formatHTML(result);
+			
+			log("Assigning fragments.");
+			result = assignFragments(result);
+		}
+		
 		if(webvowl)
 		{
 			log("Embedding WebVOWL.");
 			result = embedWebVOWL(result, ontologyURL);
 		}
-		
-		log("Formatting HTML.");
-		result = formatHTML(result);
-		
-		log("Assigning fragments.");
-		result = assignFragments(result);
 		
 		if(isFile)
 		{
@@ -412,8 +424,11 @@ public class ExtractOntology extends HttpServlet
 		log("Removing \"visualise it with LODE\" links");
 		result = removeVisualiseWithLode(result);
 		
-		log("Removing bad namespaces");
-		result = removeBadNamespaces(result);
+		if(badNamespaces)
+		{
+			log("Removing bad namespaces");
+			result = removeBadNamespaces(result);
+		}
 		
 		log("Done.");
 		

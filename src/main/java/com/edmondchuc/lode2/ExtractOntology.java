@@ -270,6 +270,10 @@ public class ExtractOntology extends HttpServlet
 			httpCall = false;
 			doGet(request, response);
 		}
+		
+		// reset: httpCall gets set only when these are false
+		urlCall = false;
+		isFile = false;
 	}
 
 	/**

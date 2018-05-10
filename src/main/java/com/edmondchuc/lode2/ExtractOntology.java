@@ -425,8 +425,11 @@ public class ExtractOntology extends HttpServlet
 			result = changeOtherVisualisation(result);
 		}
 		
-		log("Removing \"visualise it with LODE\" links");
-		result = removeVisualiseWithLode(result);
+		if(removeVisualiseWithLode)
+		{
+			log("Removing \"visualise it with LODE\" links");
+			result = removeVisualiseWithLode(result);
+		}
 		
 		if(badNamespaces)
 		{

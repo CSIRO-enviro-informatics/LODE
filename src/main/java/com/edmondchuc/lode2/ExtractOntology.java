@@ -657,10 +657,6 @@ public class ExtractOntology extends HttpServlet
 			
 			// form a line to match the original unparsed HTML
 			String line = result.substring(start, endLine);
-			if(line.equals("An agent that made this thing."))
-			{
-				System.out.println("Found");
-			}
 			
 			// If this line contains </span>, then the ontology creator didnt
 			// end the sentence with a full stop. Find the closing span tag.

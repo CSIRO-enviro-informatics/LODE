@@ -657,6 +657,10 @@ public class ExtractOntology extends HttpServlet
 			
 			// form a line to match the original unparsed HTML
 			String line = result.substring(start, endLine);
+			if(line.equals("An agent that made this thing."))
+			{
+				System.out.println("Found");
+			}
 			
 			// If this line contains </span>, then the ontology creator didnt
 			// end the sentence with a full stop. Find the closing span tag.
@@ -671,6 +675,27 @@ public class ExtractOntology extends HttpServlet
 			// get the original chunk of text by using line as a match
 			String chunk = result.substring(start, end);
 			int origStart = original.indexOf(line);
+			
+			// if line did not match anything (due to bug with the XSLT adding extra whitespace)
+			// then, reduce the line size in hopes that it eliminates the extra whitespace
+			// and matches the original text successfully.
+			while(origStart == -1)
+			{
+				// decrement the line
+				endLine -= 1;
+				
+				// exit if nothing was found
+				if(endLine == start)
+				{
+					break;
+				}
+				
+				// find the new line and try and match
+				line = result.substring(start, endLine);
+				chunk = result.substring(start, end);
+				origStart = original.indexOf(line);
+			}
+			
 			int origEnd = original.indexOf("</span>", origStart);
 			
 			// error check, allow the method to continue

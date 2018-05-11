@@ -16,6 +16,13 @@
 
   <dependencies>
   
+  	<!-- flexmark java markdown to html parser -->
+  	<dependency>
+    	<groupId>com.vladsch.flexmark</groupId>
+    	<artifactId>flexmark-all</artifactId>
+   		<version>0.32.22</version>
+	</dependency>
+  
   	<!-- aterm -->
 	<dependency>
 		<groupId>com.github.ansell.aterms</groupId>

@@ -601,7 +601,7 @@ public class ExtractOntology extends HttpServlet
 						result = result.replace(d4eHash, fragmentHash);
 						result = result.replace(d4e, fragment);
 						
-						System.out.println(d4e + " " + fragmentHash);
+						//System.out.println(d4e + " " + fragmentHash);
 					}
 					// get fragment name from slash
 					else
@@ -615,7 +615,7 @@ public class ExtractOntology extends HttpServlet
 						result = result.replace(d4eHash, fragmentHash);
 						result = result.replace(d4e, fragment);
 						
-						System.out.println(d4e + " " + fragmentHash);
+						//System.out.println(d4e + " " + fragmentHash);
 					}
 				}
 				last = end_d4e;

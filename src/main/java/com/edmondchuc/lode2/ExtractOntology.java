@@ -675,22 +675,26 @@ public class ExtractOntology extends HttpServlet
 			// if line did not match anything (due to bug with the XSLT adding extra whitespace)
 			// then, reduce the line size in hopes that it eliminates the extra whitespace
 			// and matches the original text successfully.
-			while(origStart == -1)
-			{
-				// decrement the line
-				endLine -= 1;
-				
-				// exit if nothing was found
-				if(endLine == start)
-				{
-					break;
-				}
-				
-				// find the new line and try and match
-				line = result.substring(start, endLine);
-				chunk = result.substring(start, end);
-				origStart = original.indexOf(line);
-			}
+			// 
+			// though this fixes some cases, it also produces the possibility of breaking entire documents.
+			// it is preferred that some small cases of text loses markdown formatting than documents breaking completely.
+			// functionality is now commented out.
+//			while(origStart == -1)
+//			{
+//				// decrement the line
+//				endLine -= 1;
+//				
+//				// exit if nothing was found
+//				if(endLine == start)
+//				{
+//					break;
+//				}
+//				
+//				// find the new line and try and match
+//				line = result.substring(start, endLine);
+//				chunk = result.substring(start, end);
+//				origStart = original.indexOf(line);
+//			}
 			
 			int origEnd = original.indexOf("</span>", origStart);
 			
@@ -705,7 +709,8 @@ public class ExtractOntology extends HttpServlet
 				result = result.replace(chunk, origLine);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+				System.out.println("Failed to match unformatted text.");
 			}
 			// update last, which keeps track of where we are in the document
 			last = end;

@@ -93,6 +93,13 @@ import org.slf4j.event.Level;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
+import com.vladsch.flexmark.util.Mutable;
+import com.vladsch.flexmark.util.options.DataHolder;
+import com.vladsch.flexmark.util.options.MutableDataSet;
+
 import openllet.owlapi.PelletReasoner;
 import openllet.owlapi.PelletReasonerFactory;
 
@@ -410,6 +417,9 @@ public class ExtractOntology extends HttpServlet
 		
 		if(imported == false && closure == false && reasoner == false)
 		{
+			log("Removing scripts.");
+			result = removeScripts(result);
+			
 			log("Formatting HTML.");
 			result = formatHTML(result);
 			
@@ -624,10 +634,62 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Returns a string with HTML script tags removed.
+	 * @param result the string of unformatted HTML.
+	 * @return string with jQuery scripts removed.
+	 */
+	private static String removeScripts(String result)
+	{
+		// find the first occurrence and last occurrence of script tags
+		int start = result.indexOf("<script");
+		int end = result.lastIndexOf("</script>") + 9;
+		
+		// form the substring
+		String toDelete = result.substring(start, end);
+		
+		// delete the substring by replacing it with ""
+		result = result.replace(toDelete, "");
+		
+		return result;
+	}
+	
 	private String formatHTML(String result)
 	{
 		// store the unparsed HTML in String original
-		String original = result;
+		//String original = result;
+		
+		// keep track of index in HTML
+		int last = 0;
+		
+		// markdown parser flexmark-java
+		MutableDataSet options = new MutableDataSet();
+		options.setFrom(ParserEmulationProfile.MULTI_MARKDOWN);
+		Parser parser = Parser.builder(options).build();
+		HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+		
+		// Loops through the parsed HTML and finds all text contained inside
+		// a <span> with class="markdown". 
+		// Replaces the text inside this <span> with the original text to maintain markdown formatting.
+		while(result.indexOf("class=\"markdown\"", last) != -1)
+		{
+			// find the first occurence of <span> text with class="markdown"
+			int start = result.indexOf("class=\"markdown\"", last) + 17;
+			
+			// find the end of the text contained in <span>
+			int end = result.indexOf("</span>", start);
+			
+			// String named line containing the characters within the span tag
+			String line = result.substring(start, end);
+			
+			// document for parsing markdown
+			com.vladsch.flexmark.ast.Node document = parser.parse(line);
+			String parsedHtml = renderer.render(document);
+			result = result.replace(line, parsedHtml);
+			
+			// update last, which keeps track of where we are in the document
+			last = end;
+		}
 		
 		// format HTML with Jsoup
 		Document doc = Jsoup.parse(result);
@@ -638,83 +700,6 @@ public class ExtractOntology extends HttpServlet
 		// result of parsed HTML
 		result = doc.toString();
 		
-		// keep track of index in HTML
-		int last = 0;
-		
-		// Loops through the parsed HTML and finds all text contained inside
-		// a <span> with class="markdown". 
-		// Replaces the text inside this <span> with the original text to maintain markdown formatting.
-		while(result.indexOf("class=\"markdown\"", last) != -1)
-		{
-			// find the first occurence of <span> text with class="markdown"
-			int start = result.indexOf("class=\"markdown\"", last) + 17;
-			
-			// finds the end of the current line using full stop.
-			int endLine = result.indexOf(".", start) + 1;
-			
-			// finds the end of the text contained in <span>
-			int end = result.indexOf("</span>", start);
-			
-			// form a line to match the original unparsed HTML
-			String line = result.substring(start, endLine);
-			
-			// If this line contains </span>, then the ontology creator didnt
-			// end the sentence with a full stop. Find the closing span tag.
-			// This assumes that this text contains no newlines.
-			if(line.contains("</span>"))
-			{
-				// form the new line
-				endLine = result.indexOf("</span>", start);
-				line = result.substring(start, endLine);
-			}
-			
-			// get the original chunk of text by using line as a match
-			String chunk = result.substring(start, end);
-			int origStart = original.indexOf(line);
-			
-			// if line did not match anything (due to bug with the XSLT adding extra whitespace)
-			// then, reduce the line size in hopes that it eliminates the extra whitespace
-			// and matches the original text successfully.
-			// 
-			// though this fixes some cases, it also produces the possibility of breaking entire documents.
-			// it is preferred that some small cases of text loses markdown formatting than documents breaking completely.
-			// functionality is now commented out.
-//			while(origStart == -1)
-//			{
-//				// decrement the line
-//				endLine -= 1;
-//				
-//				// exit if nothing was found
-//				if(endLine == start)
-//				{
-//					break;
-//				}
-//				
-//				// find the new line and try and match
-//				line = result.substring(start, endLine);
-//				chunk = result.substring(start, end);
-//				origStart = original.indexOf(line);
-//			}
-			
-			int origEnd = original.indexOf("</span>", origStart);
-			
-			// error check, allow the method to continue
-			// (an instance in the foaf ontology would return false
-			//  even though the text exists)
-			String origLine = "";
-			try {
-				origLine = original.substring(origStart, origEnd);
-				
-				// only modify the result if chunk is found
-				result = result.replace(chunk, origLine);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				System.out.println("Failed to match unformatted text.");
-			}
-			// update last, which keeps track of where we are in the document
-			last = end;
-		}
 		return result;
 	}
 	

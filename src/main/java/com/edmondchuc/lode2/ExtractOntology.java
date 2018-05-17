@@ -415,17 +415,14 @@ public class ExtractOntology extends HttpServlet
 		log("Removing double titles");
 		result = removeDuplicateTitle(result);
 		
-		if(imported == false && closure == false && reasoner == false)
-		{
-			log("Removing scripts.");
-			result = removeScripts(result);
-			
-			log("Formatting HTML.");
-			result = formatHTML(result);
-			
-			log("Assigning fragments.");
-			result = assignFragments(result);
-		}
+		log("Removing scripts.");
+		result = removeScripts(result);
+		
+		log("Formatting HTML.");
+		result = formatHTML(result);
+		
+		log("Assigning fragments.");
+		result = assignFragments(result);
 		
 		if(webvowl)
 		{

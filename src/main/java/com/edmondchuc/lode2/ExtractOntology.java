@@ -749,40 +749,14 @@ public class ExtractOntology extends HttpServlet
 		return "<html>" + "<head><title>LODE error</title></head>" + "<body>" + "<h2>" + "LODE error" + "</h2>" + "<p><strong>Reason: </strong>" + e.getMessage() + "</p>" + "</body>" + "</html>";
 	}
 	
+	/**
+	 * Initialises log4j. Sets error level to ERROR. Use at the beginning of doGet() or doPost().
+	 */
 	private void loggerInit()
 	{
 		// initialise log4j
 		BasicConfigurator.configure();
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
-	}
-	
-	// convert InputStream to String
-	private static String getStringFromInputStream(InputStream is) 
-	{
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
-		String line;
-		try {
-
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return sb.toString();
 	}
 	
 	private String addImportedAxioms(String result, List<String> removed) {

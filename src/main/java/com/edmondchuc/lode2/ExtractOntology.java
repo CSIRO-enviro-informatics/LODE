@@ -629,6 +629,7 @@ public class ExtractOntology extends HttpServlet
 	
 	/**
 	 * Returns a string with HTML script tags removed.
+	 * 
 	 * @param result the string of unformatted HTML.
 	 * @return string with jQuery scripts removed.
 	 */
@@ -744,6 +745,12 @@ public class ExtractOntology extends HttpServlet
 		return output.toString();
 	}
 	
+	/**
+	 * Inserts the error inside a HTML string and returns it. 
+	 * 
+	 * @param e the exception caught
+	 * @return a string of the error in the form of HTML.
+	 */
 	private String getErrorPage(Exception e) 
 	{
 		return "<html>" + "<head><title>LODE error</title></head>" + "<body>" + "<h2>" + "LODE error" + "</h2>" + "<p><strong>Reason: </strong>" + e.getMessage() + "</p>" + "</body>" + "</html>";

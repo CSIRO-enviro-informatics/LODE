@@ -889,6 +889,14 @@ public class ExtractOntology extends HttpServlet
 		}
 	}
 	
+	/**
+	 * N/A
+	 * 
+	 * @param aEntity - N/A
+	 * @param entityAnnotations - N/A
+	 * @param manager - N/A
+	 * @param ontology - N/A
+	 */
 	private void applyAnnotations(OWLEntity aEntity, Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations, OWLOntologyManager manager, OWLOntology ontology) {
 		Set<OWLAnnotationAssertionAxiom> entitySet = entityAnnotations.get(aEntity);
 		if (entitySet != null) {

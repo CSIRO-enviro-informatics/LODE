@@ -719,6 +719,14 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Transforms the given String in RDF/XML and outputs it to HTML using XSL(t).
+	 * 
+	 * @param result the RDF/XML string to be transformed.
+	 * @param ontologyURL the ontology location to be added to the transformed HTML.
+	 * @return a HTML string of the ontology.
+	 * @throws TransformerException
+	 */
 	private String ApplyXSLT(String result, String ontologyURL) throws TransformerException
 	{
 		// create transformer factory
@@ -766,6 +774,13 @@ public class ExtractOntology extends HttpServlet
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.ERROR);
 	}
 	
+	/**
+	 * N/A
+	 * 
+	 * @param result the string to add imported axioms.
+	 * @param removed N/A.
+	 * @return the modified string with additional imported axioms.
+	 */
 	private String addImportedAxioms(String result, List<String> removed) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
@@ -805,6 +820,13 @@ public class ExtractOntology extends HttpServlet
 		}
 	}
 	
+	/**
+	 * N/A.
+	 * 
+	 * @param manager N/A.
+	 * @param ontology N/A.
+	 * @return the ontology that has been parsed with Pellet reasoning.
+	 */
 	private OWLOntology parseWithReasoner(OWLOntologyManager manager, OWLOntology ontology) {
 		try {
 			PelletOptions.load(new URL("http://" + cssLocation + "pellet.properties"));
@@ -890,12 +912,12 @@ public class ExtractOntology extends HttpServlet
 	}
 	
 	/**
-	 * N/A
+	 * N/A.
 	 * 
-	 * @param aEntity - N/A
-	 * @param entityAnnotations - N/A
-	 * @param manager - N/A
-	 * @param ontology - N/A
+	 * @param aEntity N/A.
+	 * @param entityAnnotations N/A.
+	 * @param manager N/A.
+	 * @param ontology N/A.
 	 */
 	private void applyAnnotations(OWLEntity aEntity, Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations, OWLOntologyManager manager, OWLOntology ontology) {
 		Set<OWLAnnotationAssertionAxiom> entitySet = entityAnnotations.get(aEntity);

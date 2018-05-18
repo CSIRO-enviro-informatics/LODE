@@ -627,6 +627,33 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	private static String getStringFromInputStream(InputStream is)
+	{
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+		
+		String line;
+		try {
+			br = new BufferedReader(new InputStreamReader(is));
+			while((line = br.readLine()) != null)
+			{
+				sb.append(line + "\n");
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(br != null)
+			{
+				try {
+					br.close();
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return sb.toString();
+	}
+	
 	/**
 	 * Returns a string with HTML script tags removed.
 	 * 

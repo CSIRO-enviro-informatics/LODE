@@ -569,7 +569,7 @@ public class ExtractOntology extends HttpServlet
 		{
 			// find the IRI
 			int start = result.indexOf("<dd>", IRISub) + 4;
-			int end = result.indexOf("</dd>");
+			int end = result.indexOf("</dd>", start);
 			String IRI = "";
 			try {
 				IRI = result.substring(start,  end);

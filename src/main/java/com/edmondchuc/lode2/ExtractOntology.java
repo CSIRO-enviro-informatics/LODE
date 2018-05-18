@@ -105,13 +105,9 @@ import openllet.owlapi.PelletReasonerFactory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-//
-//import org.mindswap.pellet.PelletOptions;
-//import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
-//import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 
 @MultipartConfig
-(/*location="C:\\Users\\chu101\\Desktop\\tmp",*/
+(
 fileSizeThreshold=1024*1024*2, // 2MB
 maxFileSize=1024*1024*10,      // 10MB
 maxRequestSize=1024*1024*50)   // 50MB

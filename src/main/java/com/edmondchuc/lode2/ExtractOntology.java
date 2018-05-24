@@ -469,6 +469,13 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Removes namespaces that are listed in the text file namespaces.txt from the HTML document.
+	 * 
+	 * @param result the string of HTML to be processed.
+	 * @return the processed string of HTML.
+	 * @author Edmond Chuc
+	 */
 	private String removeBadNamespaces(String result)
 	{
 		// get the directory of this application

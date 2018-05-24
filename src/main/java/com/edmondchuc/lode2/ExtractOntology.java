@@ -632,6 +632,7 @@ public class ExtractOntology extends HttpServlet
 	 * 
 	 * @param is the input stream where the string content is retrieved.
 	 * @return the string retrieved from the input stream.
+	 * @author Edmond Chuc
 	 */
 	private static String getStringFromInputStream(InputStream is)
 	{
@@ -665,6 +666,7 @@ public class ExtractOntology extends HttpServlet
 	 * 
 	 * @param result the string of unformatted HTML.
 	 * @return string with jQuery scripts removed.
+	 * @author Edmond Chuc
 	 */
 	private static String removeScripts(String result)
 	{
@@ -686,6 +688,7 @@ public class ExtractOntology extends HttpServlet
 	 * 
 	 * @param result a string of unformatted HTML to be processed.
 	 * @return a string of formatted HTML.
+	 * @author Edmond Chuc
 	 */
 	private String formatHTML(String result)
 	{
@@ -741,6 +744,7 @@ public class ExtractOntology extends HttpServlet
 	 * 
 	 * @param result a string of HTML to be processed. It assumes that the input HTML string is unformatted.
 	 * @return a string containing a single HTML title tag.
+	 * @author Edmond Chuc
 	 */
 	private String removeDuplicateTitle(String result)
 	{
@@ -768,6 +772,8 @@ public class ExtractOntology extends HttpServlet
 	 * @param ontologyURL the ontology location to be added to the transformed HTML.
 	 * @return a HTML string of the ontology.
 	 * @throws TransformerException
+	 * @author Silvio Peroni
+	 * @author Edmond Chuc
 	 */
 	private String ApplyXSLT(String result, String ontologyURL) throws TransformerException
 	{
@@ -800,6 +806,7 @@ public class ExtractOntology extends HttpServlet
 	 * 
 	 * @param e the exception caught
 	 * @return a string of the error in the form of HTML.
+	 * @author Silvio Peroni
 	 */
 	private String getErrorPage(Exception e) 
 	{
@@ -808,6 +815,8 @@ public class ExtractOntology extends HttpServlet
 	
 	/**
 	 * Initialises log4j. Sets error level to ERROR. Use at the beginning of doGet() or doPost().
+	 * 
+	 * @author Edmond Chuc
 	 */
 	private void loggerInit()
 	{
@@ -822,6 +831,7 @@ public class ExtractOntology extends HttpServlet
 	 * @param result the string to add imported axioms.
 	 * @param removed N/A.
 	 * @return the modified string with additional imported axioms.
+	 * @author Silvio Peroni
 	 */
 	private String addImportedAxioms(String result, List<String> removed) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -868,6 +878,7 @@ public class ExtractOntology extends HttpServlet
 	 * @param manager N/A.
 	 * @param ontology N/A.
 	 * @return the ontology that has been parsed with Pellet reasoning.
+	 * @author Silvio Peroni
 	 */
 	private OWLOntology parseWithReasoner(OWLOntologyManager manager, OWLOntology ontology) {
 		try {
@@ -960,6 +971,7 @@ public class ExtractOntology extends HttpServlet
 	 * @param entityAnnotations N/A.
 	 * @param manager N/A.
 	 * @param ontology N/A.
+	 * @author Silvio Peroni
 	 */
 	private void applyAnnotations(OWLEntity aEntity, Map<OWLEntity, Set<OWLAnnotationAssertionAxiom>> entityAnnotations, OWLOntologyManager manager, OWLOntology ontology) {
 		Set<OWLAnnotationAssertionAxiom> entitySet = entityAnnotations.get(aEntity);

@@ -31,7 +31,10 @@ public class Add extends HttpServlet {
     }
 
 	/**
+	 * Servlet function that adds a new namespace to the text file namespaces.txt.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @author Edmond Chuc
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

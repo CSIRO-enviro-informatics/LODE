@@ -619,7 +619,7 @@ public class ExtractOntology extends HttpServlet
 	
 	/**
 	 * Assigns readable HTML fragment identifier names of the classes, properties, etc. that belong to the ontology 
-	 * specified in the IRI. <p>Example: "#d4e153" --> "#Agent".</p>
+	 * specified in the IRI. <p>Example: "#d4e153" to "#Agent".</p>
 	 * 
 	 * @param result a string of formatted HTML.
 	 * @return a string of HTML containing fragment identifier names from their respective ontology.

@@ -11,7 +11,7 @@ Try out the updated LODE [here](http://52.64.97.55/)
   
 Some improvements over [LODE](https://github.com/essepuntato/LODE):  
 * No longer requires an Apache HTTP server with PHP for file handling.
-* Updated [OWLAPI](https://owlcs.github.io/owlapi/) and other dependencies (fixes [issue](https://github.com/essepuntato/LODE/issues/4)).
+* Updated [OWLAPI](https://owlcs.github.io/owlapi/) and other dependencies (fixes this [issue](https://github.com/essepuntato/LODE/issues/4)).
 * Visualisation of the ontology with [WebVOWL](http://vowl.visualdataweb.org/webvowl.html) within the documentation.
 * Assigns fragment identifiers with their names from the loaded ontology.
 * Fixes issue with duplicate HTML title tags.

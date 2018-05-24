@@ -54,9 +54,9 @@ Try uploading some ontologies from the sampleOntologies folder or try this URL h
 Using screen allows the process to run in the background. To detatch, use `ctrl-a` followed by `d`. To resume from a new terminal, type `screen -r`. To stop jetty, inside screen use `ctrl+c`.  
 (ref: https://askubuntu.com/questions/904373/how-to-use-screen-command)
 
+Done! You should now have deployed LODE successfully!
 
-
-### Deploying LODE in Tomcat (Not working)
+### Deploying LODE in Tomcat (Not working) (TODO)
 
 #### Install Tomcat8
 `sudo apt install -y tomcat8`  

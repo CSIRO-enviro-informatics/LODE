@@ -537,6 +537,14 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Changes access to "Other visualisation: " from calling a servlet function to directly accessing the file via 
+	 * a URL. <p>Note: This implementation only works for HTML documents in English.</p>
+	 * 
+	 * @param result the string of HTML to be processed.
+	 * @return the processed string of HTML.
+	 * @author Edmond Chuc
+	 */
 	private String changeOtherVisualisation(String result)
 	{
 		// get the root tag containing Other visualisation

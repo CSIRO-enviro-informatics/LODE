@@ -20,11 +20,11 @@ Some improvements over [LODE](https://github.com/essepuntato/LODE):
 
 
 <p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_top2.PNG" width="75%" height="75%"/></p>
-<p align="center">Sample 1 - A LODE document of DOLCE+DnS Ultralite Ontology.</p>
+<p align="center">Sample 1 - <a href="http://52.64.97.55/extract?url=http://www.ontologydesignpatterns.org/ont/dul/DUL.owl&webvowl=true&removeVisualiseWithLode=true">DOLCE+DnS Ultralite Ontology</a> visualised with LODE.</p>
   
 
 <p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_vis2.PNG" width="75%" height="75%"/></p>
-<p align="center">Sample 2 - A LODE document containing WebVOWL.</p>
+<p align="center">Sample 2 - WebVOWL embedded inside HTML document.</p>
 
 ---
 

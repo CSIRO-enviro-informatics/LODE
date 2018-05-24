@@ -675,6 +675,12 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Formats the HTML with neat indentation and newlines. Transforms markdown text to HTML.
+	 * 
+	 * @param result a string of unformatted HTML to be processed.
+	 * @return a string of formatted HTML.
+	 */
 	private String formatHTML(String result)
 	{
 		// store the unparsed HTML in String original

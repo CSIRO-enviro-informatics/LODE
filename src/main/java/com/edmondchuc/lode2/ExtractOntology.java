@@ -627,6 +627,12 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Converts the content in an input stream to string.
+	 * 
+	 * @param is the input stream where the string content is retrieved.
+	 * @return the string retrieved from the input stream.
+	 */
 	private static String getStringFromInputStream(InputStream is)
 	{
 		BufferedReader br = null;

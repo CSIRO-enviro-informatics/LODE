@@ -14,6 +14,7 @@ This repository is a Java servlet application that creates HTML documentation fo
 
 <p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_vis2.PNG" width="75%" height="75%"/></p>
 <p align="center">Sample 2 - A LODE document containing WebVOWL.</p>
+
 ---
 
 ## Table Of Contents:

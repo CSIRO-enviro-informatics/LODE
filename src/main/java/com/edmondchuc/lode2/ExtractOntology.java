@@ -162,7 +162,10 @@ public class ExtractOntology extends HttpServlet
     }
     
     /**
+     * doPost() servlet that handles the user request through a web form. Handles file uploads.
+     * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @author Edmond Chuc
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{	
@@ -280,7 +283,10 @@ public class ExtractOntology extends HttpServlet
 	}
 
 	/**
+	 * doGet() servlet that handles the user request over HTTP.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @author Edmond Chuc
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
@@ -335,7 +341,15 @@ public class ExtractOntology extends HttpServlet
 		}
 	}
 	
-	// call the OWLAPI and apply XSL transform with some post-process tidy
+	/**
+	 * Parses the ontology with OWLAPI, transforms the output of OWLAPI from XML to HTML and applies some 
+	 * post-processing tidy functions. <p>Note: This function serves the result of the string back to the user.</p>
+	 * 
+	 * @param ontologyURL the full URL address of the ontology document
+	 * @param out the PrintWriter object that writes back to the user.
+	 * @return a string of the result in HTML.
+	 * @author Edmond Chuc
+	 */
 	private String transform(String ontologyURL, PrintWriter out)
 	{
 		String result = "";

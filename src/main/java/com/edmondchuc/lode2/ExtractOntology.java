@@ -724,8 +724,11 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
-	/*
-	 * Note: removeDoubleTitle assumes the HTML String is unformatted
+	/**
+	 * Removes duplicate HTML title tags. 
+	 * 
+	 * @param result a string of HTML to be processed. It assumes that the input HTML string is unformatted.
+	 * @return a string containing a single HTML title tag.
 	 */
 	private String removeDuplicateTitle(String result)
 	{

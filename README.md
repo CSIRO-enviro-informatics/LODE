@@ -7,7 +7,11 @@
 # Live OWL Documentation Environment (LODE)
 This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/).  
 
-<iframe src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/lode_example_preview.pdf" height="300" width="100%">Sorry your browser does not support iframe.</iframe>
+<object data="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/lode_example_preview.pdf" type="application/pdf" width="100%" height="300px">
+    <embed src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/lode_example_preview.pdf">
+        This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/lode_example_preview.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
 
 ---
 

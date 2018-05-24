@@ -56,7 +56,7 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 ---
 
 ## Installation <a name="completeStepsToInstallingNRunningLODE"></a>
-Please see [install.md](https://github.com/CSIRO-enviro-informatics/LODE/blob/master/INSTALL.md) for the list of instructions.  
+Please see [INSTALL.md](https://github.com/CSIRO-enviro-informatics/LODE/blob/master/INSTALL.md) for the list of instructions.  
   
 Here is a flow chart [diagram](https://i.imgur.com/zFNqfy5.png) detailing the software architecture of LODE.
 

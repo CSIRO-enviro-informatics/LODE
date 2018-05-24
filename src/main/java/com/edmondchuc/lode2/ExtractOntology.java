@@ -364,6 +364,16 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Extracts OWL terms from an ontology URL and formats them in RDF/XML.
+	 * 
+	 * @param ontologyURL the full URL address of the ontology document
+	 * @return a string of the result of the OWLAPI in RDF/XML.
+	 * @throws OWLOntologyCreationException
+	 * @throws OWLOntologyStorageException
+	 * @throws TransformerException
+	 * @author Edmond Chuc
+	 */
 	private String parseWithOWLAPI(String ontologyURL) throws OWLOntologyCreationException, OWLOntologyStorageException, TransformerException
 	{
 		// create ontology manager
@@ -406,6 +416,14 @@ public class ExtractOntology extends HttpServlet
 		return parsedOntology.toString();
 	}
 	
+	/**
+	 * This function calls the various post-processing functions shared between doGet() and doPost().
+	 * 
+	 * @param result the string of HTML to be processed.
+	 * @param ontologyURL the full URL address of the ontology document
+	 * @return a processed HTML string.
+	 * @author Edmond Chuc
+	 */
 	private String tidy(String result, String ontologyURL)
 	{
 		log("Removing double titles");
@@ -453,7 +471,7 @@ public class ExtractOntology extends HttpServlet
 	 * Adds a HTML iframe into the HTML document that calls the WebVOWL service.
 	 * 
 	 * @param result the string of HTML where the iframe will be added.
-	 * @param ontologyURL the full URL address of the WebVOWL service. 
+	 * @param ontologyURL the full URL address of the ontology document. 
 	 * @return a string of HTML with WebVOWL added as an iframe.
 	 * @author Edmond Chuc
 	 */

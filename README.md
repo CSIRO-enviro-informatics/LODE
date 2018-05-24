@@ -5,7 +5,9 @@
 ---
 
 # Live OWL Documentation Environment (LODE)
-This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/). 
+This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/).  
+
+<iframe src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/lode_example_preview.pdf" height="300" width="100%">Sorry your browser does not support iframe.</iframe>
 
 ---
 
@@ -31,11 +33,8 @@ This repository is a Java servlet application that creates HTML documentation fo
 
 ### Complete LODE (web interface) <a name="completeLODE"></a>
 1. Run LODE on a Jetty server.
-	* Example: http://52.64.97.55/
-	* **PROMS ontology**
-		* Try uploading [proms.ttl](proms.ttl)
-		* It is a very tiny ontology visualised online using LODE at <http://promsns.org/def/proms/>.
-		* You can run try using a local instance of LODE to generate HTML for the local copy of PROMS and compare it with the online version made by the PROMS creator
+	* Deployed example at: http://52.64.97.55/  
+	Try one of the examples listed on the web page.
 
 ---
 

@@ -519,6 +519,13 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Removes "Visualise it with LODE" links.
+	 * 
+	 * @param result the string of HTML to be processed.
+	 * @return the processed string of HTML.
+	 * @author Edmond Chuc
+	 */
 	private String removeVisualiseWithLode(String result)
 	{
 		int last = 0;

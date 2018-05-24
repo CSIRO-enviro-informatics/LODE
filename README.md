@@ -5,7 +5,7 @@
 ---
 
 # Live OWL Documentation Environment (LODE)
-This repository is a Tomcat server application that can be used to create HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project has been updated by [Edmond Chuc](http://www.edmondchuc.com), a student at the [CSIRO](https://www.csiro.au/). 
+This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/). 
 
 ---
 
@@ -20,16 +20,17 @@ This repository is a Tomcat server application that can be used to create HTML d
 
 ## Example Usage: <a name="exampleUsage"></a>
 ### Minimal LODE <a name="minimalLODE"></a>
-1. Launch application:
+1. Launch application using Apache Maven:
 
 	* `mvn clean jetty:run`
 
 2. Open a web browser and call the LODE service.
-	* **DOLCE ontology**
-		* `http://localhost:8080/lode/extract?url=http://www.loa.istc.cnr.it/ontologies/DOLCE-Lite.owl`  
+	* **FOAF Ontology**
+		* `http://localhost:8080/extract?owlapi=true&webvowl=true&url=http://xmlns.com/foaf/spec/20140114.rdf`  
+		This calls the LODE service with the parameters OWLAPI and WebVOWL selected to visualise the FOAF ontology.
 
-### Complete LODE (user-interface) <a name="completeLODE"></a>
-1. Run LODE on a Tomcat server.
+### Complete LODE (web interface) <a name="completeLODE"></a>
+1. Run LODE on a Jetty server.
 	* Example: http://52.64.97.55/
 	* **PROMS ontology**
 		* Try uploading [proms.ttl](proms.ttl)

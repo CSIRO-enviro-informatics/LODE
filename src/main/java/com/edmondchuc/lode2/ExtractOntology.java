@@ -449,6 +449,14 @@ public class ExtractOntology extends HttpServlet
 		return result;
 	}
 	
+	/**
+	 * Adds a HTML iframe into the HTML document that calls the WebVOWL service.
+	 * 
+	 * @param result the string of HTML where the iframe will be added.
+	 * @param ontologyURL the full URL address of the WebVOWL service. 
+	 * @return a string of HTML with WebVOWL added as an iframe.
+	 * @author Edmond Chuc
+	 */
 	private String embedWebVOWL(String result, String ontologyURL)
 	{
 		// find the open div tag of table of contents

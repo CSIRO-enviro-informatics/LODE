@@ -8,11 +8,11 @@
 This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/).  
 
 
-<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_top2.PNG"/></p>
+<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_top2.PNG" width="75%" height="75%"/></p>
 <p align="center">Sample 1 - A LODE document of DOLCE+DnS Ultralite Ontology.</p>
   
 
-<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_vis2.PNG"/></p>
+<p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_vis2.PNG" width="75%" height="75%"/></p>
 <p align="center">Sample 2 - A LODE document containing WebVOWL.</p>
 ---
 

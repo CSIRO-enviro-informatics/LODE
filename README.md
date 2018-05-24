@@ -15,7 +15,7 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 * Visualisation of the ontology with [WebVOWL](http://vowl.visualdataweb.org/webvowl.html) embedded within the documentation.
 * Assigns fragment identifiers with their names from the loaded ontology.
 * Fixes issue with duplicate HTML title tags.
-* HTML output is now formatted for readability.
+* HTML output is now formatted. ("beautified").
 * Markdown no longer relies on jQuery scripts. The markdown is now parsed to HTML before serving back to user.
 
 

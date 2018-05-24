@@ -6,6 +6,17 @@
 
 # Live OWL Documentation Environment (LODE)
 This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/).  
+  
+Try out the updated LODE [here](http://52.64.97.55/)
+  
+Some improvements over [LODE](https://github.com/essepuntato/LODE):  
+* No longer requires an Apache HTTP server with PHP for file handling.
+* Updated [OWLAPI](https://owlcs.github.io/owlapi/) and other dependencies (fixes [issue](https://github.com/essepuntato/LODE/issues/4)).
+* Visualisation of the ontology with [WebVOWL](http://vowl.visualdataweb.org/webvowl.html) within the documentation.
+* Assigns fragment identifiers with their names from the loaded ontology.
+* Fixes issue with duplicate HTML title tags.
+* HTML output is now formatted for readability.
+* Markdown no longer relies on jQuery scripts. The markdown is now parsed to HTML before serving back to user.
 
 
 <p align="center"><img src="https://github.com/CSIRO-enviro-informatics/LODE/blob/master/info/sample_top2.PNG" width="75%" height="75%"/></p>

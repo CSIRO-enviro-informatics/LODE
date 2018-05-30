@@ -32,7 +32,7 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 * [Example Usage](#exampleUsage)
 	* [Minimal LODE](#minimalLODE)
 	* [Complete LODE (user-interface)](#completeLODE)
-* [Installation](#completeStepsToInstallingNRunningLODE)
+* [Installation](#information)
 * [Contact](#contact)
 
 ---
@@ -55,10 +55,12 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 
 ---
 
-## Installation <a name="completeStepsToInstallingNRunningLODE"></a>
+## Installation and other information <a name="information"></a>
 Please see [INSTALL.md](https://github.com/CSIRO-enviro-informatics/LODE/blob/master/INSTALL.md) for the list of instructions.  
   
-Here is a flow chart [diagram](https://i.imgur.com/zFNqfy5.png) detailing the software architecture of LODE.
+Here is a flow chart [diagram](https://i.imgur.com/zFNqfy5.png) detailing the software architecture of LODE.  
+  
+Here are some [slides](https://docs.google.com/presentation/d/14s5URj_7hI5vbCtO7MIvLZiI4abt449hJ-8U_9PRmWk/edit?usp=sharing) that summarise the LODE project.
 
 ---
 

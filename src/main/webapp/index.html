@@ -15,7 +15,7 @@ Description: The landing page of the modified LODE service.
    <body>
       <h1>LODE 2</h1>
       <p>Enter URL of ontology or upload a file.</p>
-      <form action="extract" method="POST" enctype="multipart/form-data">
+      <form action="extract" method="POST" enctype="multipart/form-data" id="userform">
             <input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
             <input type="file" name="file">
             <input type="submit" value="Generate Document" name="submit" />
@@ -45,7 +45,9 @@ Description: The landing page of the modified LODE service.
       <br>
       Bad namespaces:
       <br>
-      <iframe src="http://52.64.97.55/namespaces.txt" height="100" width="25%"> Sorry your browser does not support iframe.</iframe>
+      <textarea rows="10" cols="50" name="namespaces" form="userform"></textarea>
+      <br>
+      <!-- <iframe src="http://52.64.97.55/namespaces.txt" height="100" width="25%"> Sorry your browser does not support iframe.</iframe> -->
       <h2>Examples</h2>
       DOLCE+DnS Ultralite 	- <blockquote><pre>http://www.ontologydesignpatterns.org/ont/dul/DUL.owl</pre></blockquote><br>
       Pizza Ontology 		- <blockquote><pre>https://protege.stanford.edu/ontologies/pizza/pizza.owl</pre></blockquote><br>

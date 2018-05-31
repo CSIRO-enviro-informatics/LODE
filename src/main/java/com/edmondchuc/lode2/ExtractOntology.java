@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -146,7 +147,7 @@ public class ExtractOntology extends HttpServlet
 	boolean badNamespaces = false;
 	boolean removeVisualiseWithLode = false;
 	
-	// was it a HTTP request over URL?
+	// Used to check if it was a HTTP request over URL
 	// sets to false in doPost()
 	boolean httpCall = false;
 	boolean urlCall = false;
@@ -183,8 +184,39 @@ public class ExtractOntology extends HttpServlet
 		closure = new Boolean(request.getParameter("module").equals("closure"));
 		reasoner = false;
 		webvowl = false;
-		badNamespaces = false;
 		removeVisualiseWithLode = false;
+		String namespaces = request.getParameter("namespaces");
+		
+		if(namespaces.equals(""))
+		{
+			badNamespaces = false;
+			System.out.println("Empty");
+		}
+		else
+		{
+			badNamespaces = true;
+			System.out.println("Namespaces: \n" + namespaces);
+			log("Writing bad namespaces to disk.");
+			
+			// get the directory of this application
+			String path = System.getProperty("user.dir");
+			
+			String username = System.getProperty("user.name"); //"ubuntu";
+			
+			// path to the text document of namespaces
+			//String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+			String filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+			//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
+			
+			FileWriter fileWriter = new FileWriter(filePath, true);
+			
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			
+			bufferedWriter.append(namespaces);
+			
+			bufferedWriter.close();
+		}
+		
 		try {
 			webvowl = request.getParameter("webvowl").equals("webvowl");
 		} catch (Exception e1) {
@@ -195,12 +227,6 @@ public class ExtractOntology extends HttpServlet
 		try {
 			reasoner = request.getParameter("reasoner").equals("reasoner");
 			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
-		try {
-			badNamespaces = request.getParameter("badNamespaces").equals("badNamespaces");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();

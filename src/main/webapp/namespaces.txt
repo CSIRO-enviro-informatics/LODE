@@ -1,2 +1,3 @@
 http://www.w3.org/ns/
+http://www.opengis.net/ont/http://www.w3.org/ns/
 http://www.opengis.net/ont/

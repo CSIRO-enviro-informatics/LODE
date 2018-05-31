@@ -187,36 +187,6 @@ public class ExtractOntology extends HttpServlet
 		removeVisualiseWithLode = false;
 		String namespaces = request.getParameter("namespaces");
 		
-		if(namespaces.equals(""))
-		{
-			badNamespaces = false;
-			System.out.println("Empty");
-		}
-		else
-		{
-			badNamespaces = true;
-			System.out.println("Namespaces: \n" + namespaces);
-			log("Writing bad namespaces to disk.");
-			
-			// get the directory of this application
-			String path = System.getProperty("user.dir");
-			
-			String username = System.getProperty("user.name"); //"ubuntu";
-			
-			// path to the text document of namespaces
-			//String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
-			String filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
-			//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
-			
-			FileWriter fileWriter = new FileWriter(filePath, true);
-			
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			
-			bufferedWriter.append(namespaces);
-			
-			bufferedWriter.close();
-		}
-		
 		try {
 			webvowl = request.getParameter("webvowl").equals("webvowl");
 		} catch (Exception e1) {
@@ -244,6 +214,38 @@ public class ExtractOntology extends HttpServlet
 		}
 		log("Parameters:");
 		System.out.println("imported: \t" + imported + "\nclosure: \t" + closure + "\nreasoner: \t" + reasoner + "\nlang: \t\t" + lang + "\nwebvowl: \t" + webvowl + "\nbadNamespaces: \t" + badNamespaces + "\nremoveVisualiseWithLode: \t" + removeVisualiseWithLode);
+		
+		if(namespaces.equals(""))
+		{
+			badNamespaces = false;
+			log("No bad namespaces entered.");
+		}
+		else
+		{
+			badNamespaces = true;
+			log("Bad namespaces:");
+			System.out.println(namespaces);
+			log("Writing bad namespaces to disk.");
+			
+			// get the directory of this application
+			String path = System.getProperty("user.dir");
+			
+			String username = System.getProperty("user.name"); //"ubuntu";
+			
+			// path to the text document of namespaces
+			//String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+			String filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
+			//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
+			
+			FileWriter fileWriter = new FileWriter(filePath, true);
+			
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			
+			bufferedWriter.append(namespaces);
+			
+			bufferedWriter.close();
+		}
+		
 		// get header type
 		String header = filePart.getHeader("content-disposition");
 		if(header.contains("filename=\"\""))

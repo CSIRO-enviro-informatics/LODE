@@ -146,6 +146,7 @@ public class ExtractOntology extends HttpServlet
 	boolean webvowl = false;
 	boolean badNamespaces = false;
 	boolean removeVisualiseWithLode = false;
+	String namespaces = "";
 	
 	// Used to check if it was a HTTP request over URL
 	// sets to false in doPost()
@@ -185,7 +186,7 @@ public class ExtractOntology extends HttpServlet
 		reasoner = false;
 		webvowl = false;
 		removeVisualiseWithLode = false;
-		String namespaces = request.getParameter("namespaces");
+		namespaces = request.getParameter("namespaces");
 		
 		try {
 			webvowl = request.getParameter("webvowl").equals("webvowl");
@@ -225,25 +226,6 @@ public class ExtractOntology extends HttpServlet
 			badNamespaces = true;
 			log("Bad namespaces:");
 			System.out.println(namespaces);
-			log("Writing bad namespaces to disk.");
-			
-			// get the directory of this application
-			String path = System.getProperty("user.dir");
-			
-			String username = System.getProperty("user.name"); //"ubuntu";
-			
-			// path to the text document of namespaces
-			//String filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
-			String filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt").toString();
-			//String filePath = "/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt";
-			
-			FileWriter fileWriter = new FileWriter(filePath, true);
-			
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			
-			bufferedWriter.append(namespaces);
-			
-			bufferedWriter.close();
 		}
 		
 		// get header type
@@ -546,51 +528,47 @@ public class ExtractOntology extends HttpServlet
 	 */
 	private String removeBadNamespaces(String result)
 	{
-		// get the directory of this application
-		String path = System.getProperty("user.dir");
+		// eliminate leading and trailing whitespace
+		namespaces = namespaces.trim();
 		
-		// path to the text document of namespaces
-		//Path filePath = Paths.get("/home" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
-		Path filePath = Paths.get("/Users" + File.separator + username + File.separator + "lode/src/main/webapp/namespaces.txt");
-		//Path filePath = Paths.get("/home/ubuntu/lode/target/lode2-0.0.1-SNAPSHOT/namespaces.txt");
+		// find the default namespace section as the entry point to the search for each namespace
+		int start = result.indexOf("<div id=\"namespacedeclarations\"");
 		
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(filePath);
+		int namespaceStart = 0;
+		
+		// split the namespaces string into each namespace
+		String arrayOfNamespaces[] = namespaces.split("\n");
+		
+		for(String namespace : arrayOfNamespaces)
+		{
+			// set the entry point for searching
+			int last = start;
 			
-			// find the default namespace section
-			int start = result.indexOf("<div id=\"namespacedeclarations\"");
+			// eliminate whitespace
+			namespace = namespace.trim();
 			
-			while(scanner.hasNext())
+			// loop if this namespace exists in the document
+			while(result.indexOf(namespace, last) != -1)
 			{
-				String namespace = scanner.next();
+				// check if namespace matches in the document
+				int checkStart = result.indexOf(namespace, last);
+				int checkEnd = result.indexOf("\n", checkStart);
+				String checkString = result.substring(checkStart, checkEnd);
+				System.out.println("namespace: " + namespace + " checkString: " + checkString + " equals: " + namespace.equals(checkString));
 				
-				int last = start;
-				// if this namespace exists in the ontology
-				while(result.indexOf(namespace, last) != -1)
+				// remove if they absolutely equal each other
+				if(namespace.equals(checkString))
 				{
-					// check if it matches exactly
-					int checkStart = result.indexOf(namespace, last);
-					int checkEnd = result.indexOf("\n", checkStart);
-					String checkString = result.substring(checkStart, checkEnd);
-					System.out.println("namespace: " + namespace + " checkString: " + checkString + " equals: " + namespace.equals(checkString));
-				
-					// remove if they equal absolutely
-					if(namespace.equals(checkString))
-					{
-						checkStart = result.lastIndexOf("<dt>", checkStart) - 1;
-						checkEnd = result.indexOf("</dd>", checkEnd) + 5;
-						String sub = result.substring(checkStart, checkEnd);
-						
-						result = result.replace(sub, "");
-					}
-					last = checkEnd;
+					checkStart = result.lastIndexOf("<dt>", checkStart) - 1;
+					checkEnd = result.indexOf("</dd>", checkEnd) + 5;
+					String sub = result.substring(checkStart, checkEnd);
+					
+					result = result.replace(sub, "");
 				}
+				last = checkEnd;
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+	
 		return result;
 	}
 	

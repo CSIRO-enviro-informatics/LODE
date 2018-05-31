@@ -26,13 +26,4 @@
     <servlet-name>GetSource</servlet-name>
     <url-pattern>/source</url-pattern>
   </servlet-mapping>
-  
-  <servlet>
-  	<servlet-name>Add</servlet-name>
-  	<servlet-class>com.edmondchuc.lode2.Add</servlet-class>  
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>Add</servlet-name>
-  	<url-pattern>/add</url-pattern>
-  </servlet-mapping>
 </web-app>

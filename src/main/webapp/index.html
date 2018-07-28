@@ -2,71 +2,92 @@
 Author: Edmond Chuc
 Date created: 29/03/2018
 Description: The landing page of the modified LODE service.
+Updates: 28/07/2018, Nicholas Car - added AGLDWG styling
  -->
 
 <!DOCTYPE html>
 
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>LODE 2</title>
-		<link href="http://pid.data.gov.au/websrv/static/LODE/extra.css" rel="stylesheet" type="text/css">
-	</head>
-   <body>
-      <h1>LODE 2</h1>
-      <p>Enter URL of ontology or upload a file.</p>
-      <form action="extract" method="POST" enctype="multipart/form-data" id="userform">
-            <input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
-            <input type="file" name="file">
-            <input type="submit" value="Generate Document" name="submit" />
-            <div>
-               <span class="modules"><br/>
-                  <label>Modules:</label>
-                  <!-- <input type="radio" name="module" value="" checked="checked" /> <span class="text">None</span> -->
-                  <input type="radio" name="module" value="owlapi" checked="checked" /> <span class="text">OWLAPI</span>
-                  <span class="noWrap">
-                     <input type="radio" name="module" value="imported" /> <span class="text">OWLAPI + Imported</span>
-                  </span>
-                  <span class="noWrap">
-                     <input type="radio" name="module" value="closure" /> <span class="text">OWLAPI + Closure</span>
-                  </span>
-               </span><br/><br/>
-               <input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> <span class="reasoner">Use the reasoner</span><br/><br/>
-               <input type="checkbox" id="webvowl" name="webvowl" value="webvowl" /> <span class="webvowl">Generate WebVOWL</span><br/><br/>
-               <input type="checkbox" id="removeVisualiseWithLode" name="removeVisualiseWithLode" value="removeVisualiseWithLode" /> <span class="removeVisualiseWithLode">Remove "Visualise with LODE" links (English only)</span><br/><br/>
-               <span class="lang noWrap">
-                  <label for="number">Language</label>:
-                  <input id="number" type="text" name="lang_label" value="" placeholder="'en' if empty" />
-                  or try 'it' for Italian or 'fr' for French.
-               </span>
-            </div>
-      </form>
-      <br>
-      <b>Bad namespaces:</b>
-      <br>
-      Add the complete namespace that you would like to not include in your documentation. Each namespace must be on a new line.
-      <br>
-      <textarea rows="10" cols="50" name="namespaces" form="userform"></textarea>
-      --> Example: <iframe src="http://52.64.97.55/exampleNamespaces.txt" height="50" width="25%"> Sorry your browser does not support iframe.</iframe>
-      <h2>Examples</h2>
-      DOLCE+DnS Ultralite 	- <blockquote><pre>http://www.ontologydesignpatterns.org/ont/dul/DUL.owl</pre></blockquote><br>
-      Pizza Ontology 		- <blockquote><pre>https://protege.stanford.edu/ontologies/pizza/pizza.owl</pre></blockquote><br>
-      FOAF Ontology 		- <blockquote><pre>http://xmlns.com/foaf/spec/20140114.rdf</pre></blockquote><br>
-      Agreements Ontology 	- <blockquote><pre>https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote><br>
-      GNAF Ontology		 	- <blockquote><pre>https://raw.githubusercontent.com/AGLDWG/gnaf-ont/master/gnaf.ttl</pre></blockquote><br>
-      <h2>Call the LODE service</h2>
-      <h4>Example:</h4>
-      <br>
-      For now...
-      <br>
-      This calls the LODE service with the OWLAPI+imported option, language as Italian and WebVOWL integration.
-      <blockquote><pre>http://52.64.97.55/extract?imported=true&lang=it&webvowl=true&url=https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote>
-      <br>
-      For the future...
-      <br>
-      <blockquote><pre>http://lode2.promsns.org/extract?import=true&lang=it&webvowl=true&url=https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote>
-   </body>
-   <footer>
-   	  <p class="endnote"><a href="http://lode2.promsns.org">LODE 2</a>, <em>Live OWL Documentation Environment, v2</em>, originally developed as LODE by <a href="http://www.essepuntato.it">Silvio Peroni</a> and updated by <a href="http://www.edmondchuc.com">Edmond Chuc</a> at the <a href="https://www.csiro.au">CSIRO</a>.</p>
-   </footer>
+<head>
+	<title>LODE 2</title>
+	<meta charset="utf-8" />
+	<link href="http://www.linked.data.gov.au/style/css/ochre.css" rel="stylesheet" type="text/css">
+
+	<style>
+		form {
+			color: black;
+		}
+	</style>
+</head>
+<body>
+	<header id="header" style="text-align:right; padding-top:10px;">
+		<div style="width:150px; height:150px; float:left;">
+			<img src="http://www.linked.data.gov.au/style/img/agldwg-logo-ochre-150.png" alt="AGLDWG logo" />
+		</div>
+		<div id="nav">
+			<a href="http://www.linked.data.gov.au">AGLDWG Home</a>
+		</div>
+	</header>
+	<div id="main" style="clear:both;">
+	        <h1>Australian Government Linked Data Working Group</h1>
+	        <h2>LODE 2</h2>
+		<p>LODE 2 is an updated version of <a href="http://www.essepuntato.it/lode">LODE</a>, "a service that automatically extracts classes, object properties, data properties, named individuals, annotation properties, general axioms and namespace declarations from an OWL and OWL2 ontology, and renders them as ordered lists, together with their textual definitions, in a human-readable HTML page".</p>
+		<form action="extract" method="POST" enctype="multipart/form-data" id="userform" style="border:solid 1px #eeeeee; padding:5px;">
+			<p>Enter URL of ontology or upload a file.</p>
+
+			<input type="url" id="url" name="url" placeholder="Put here the complete ontology URL" size="60">
+			<input type="file" name="file">
+			<input type="submit" value="Generate Document" name="submit" />
+
+			<h4>Modules:</h4>
+			<!-- <input type="radio" name="module" value="" checked="checked" /> None -->
+			<input type="radio" name="module" value="owlapi" checked="checked" /> OWLAPI
+			<input type="radio" name="module" value="imported" /> OWLAPI + Imported
+			<input type="radio" name="module" value="closure" /> OWLAPI + Closure
+
+			<h4>Extended options</h4>
+			<input type="checkbox" id="reasoner" name="reasoner" value="reasoner" /> Use the reasoner<br />
+			<input type="checkbox" id="webvowl" name="webvowl" value="webvowl" /> Generate WebVOWL<br/>
+			<input type="checkbox" id="removeVisualiseWithLode" name="removeVisualiseWithLode" value="removeVisualiseWithLode" /> Remove "Visualise with LODE" links (English only)<br/>
+			<label for="number">Language</label>:
+			<input id="number" type="text" name="lang_label" value="" placeholder="'en' if empty" /> or try 'it' for Italian or 'fr' for French.
+	                
+			<h4>Bad namespaces</h4>
+	                <p>Add namespaces that you would like to not include in your documentation. Each namespace must be on a new line.</p>
+        	        <textarea rows="10" cols="50" name="namespaces" form="userform"></textarea>
+                	&rarr;  Example: <iframe src="http://lode2.linked.data.gov.au/exampleNamespaces.txt" height="50" width="25%"> Sorry your browser does not support iframe.</iframe>
+		
+		</form>
+
+		<h3>Test ontologies</h3>
+		<p>Use these ontology URIs to test the service by entereing them above.</p>
+		<ul>
+			<li><strong>DOLCE+DnS Ultralite</strong> - <blockquote><pre>http://www.ontologydesignpatterns.org/ont/dul/DUL.owl</pre></blockquote></li>
+			<li><strong>Pizza Ontology</strong> 	 - <blockquote><pre>https://protege.stanford.edu/ontologies/pizza/pizza.owl</pre></blockquote></li>
+			<li><strong>FOAF Ontology</strong> 	 - <blockquote><pre>http://xmlns.com/foaf/spec/20140114.rdf</pre></blockquote></li>
+			<li><strong>Agreements Ontology</strong> - <blockquote><pre>https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote></li>
+			<li><strong>GNAF Ontology</strong>	 - <blockquote><pre>https://raw.githubusercontent.com/AGLDWG/gnaf-ont/master/gnaf.ttl</pre></blockquote></li>
+		</ul>
+		<h3>Call the LODE service directly</h3>
+		<h4>Example:</h4>
+		<p>
+			This calls the LODE service with the OWLAPI+imported option, language as Italian and WebVOWL integration.
+			<blockquote><pre>http://lode2.linked.data.gov.au/extract?imported=true&lang=it&webvowl=true&url=https://raw.githubusercontent.com/nicholascar/agr-o/master/agr.ttl</pre></blockquote>
+		</p>
+
+	</div> <!-- main_content -->
+
+	<footer>
+		<div id="footer_content">
+			<div id="license">
+				<img src="https://toolkit.data.gov.au/skins/common/images/cc-by.png" alt="CC-BY 4.0 licence, except the Commonwealth Coat of Arms" width="88" height="31">
+				This web page content is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>
+			</div>
+			<div style="float:right; width:65%; text-align:right;">
+				<p class="endnote"><a href="http://lode2.promsns.org">LODE 2</a>, <em>Live OWL Documentation Environment, v2</em>, originally developed as LODE by <a href="http://www.essepuntato.it">Silvio Peroni</a> and updated by <a href="http://www.edmondchuc.com">Edmond Chuc</a> at the <a href="https://www.csiro.au">CSIRO</a>.</p>
+			</div>
+			<div style="clear:both;">&nbsp;</div>
+		</div>
+	</footer>
+</body>
 </html>

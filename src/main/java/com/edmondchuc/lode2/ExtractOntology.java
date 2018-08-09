@@ -125,11 +125,11 @@ public class ExtractOntology extends HttpServlet
 	String username = System.getProperty("user.name"); //"ubuntu";
 	
 	// settings (point them to server when deploying)
-	String xsltURL = "http://localhost:8080/extraction.xsl"; //"http://52.64.97.55:80/extraction.xsl";
-	String cssLocation = "http://localhost:8080/"; //"http://52.64.97.55:80/";
-	String uploadedFilePath = "http://localhost:8080/uploadedFiles/"; //"http://52.64.97.55:80/uploadedFiles/";
+	String xsltURL = "http://lode2.linked.data.gov.au/extraction.xsl"; //"http://52.64.97.55:80/extraction.xsl";
+	String cssLocation = "http://lode2.linked.data.gov.au/"; // "http://52.64.97.55:80/";
+	String uploadedFilePath = "http://lode2.linked.data.gov.au/uploadedFiles/"; // "http://52.64.97.55:80/uploadedFiles/";
 	String lang = "en";	// default
-	String webvowlAdd = "http://52.64.97.55:8080/";
+	String webvowlAdd = "http://lode2.linked.data.gov.au/webvowl/";  //"http://52.64.97.55:8000/";
 	
 	// flag to prevent tidy() being called twice if request is URL
 	// don't really like this implementation but it will do for now

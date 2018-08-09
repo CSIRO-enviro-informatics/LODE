@@ -5,10 +5,23 @@
 ---
 
 # Live OWL Documentation Environment (LODE)
-This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/).  
+This repository is a Java servlet application that creates HTML documentation for [Web Ontology Language](https://www.w3.org/OWL/) (OWL) ontologies. This project is  being updated by [Edmond Chuc](http://www.edmondchuc.com) at the [CSIRO](https://www.csiro.au/) and is being actively used by the [Australian Government Linked Data Working Group](http://www.linked.data.gov.au/) (AGLDWG).  
   
-Try out the updated LODE [here](http://52.64.97.55/)
+Try out the updated LODE at http://lode2.linked.data.gov.au/
+
+---
+
+## Table Of Contents:
+* [Updates](#updates)
+* [Example Usage](#exampleUsage)
+	* [Minimal LODE](#minimalLODE)
+	* [Complete LODE (user-interface)](#completeLODE)
+* [Installation](#information)
+* [Contact](#contact)
+
+---
   
+## Updates: <a name="updates"></a>
 Some improvements over the original [LODE](https://github.com/essepuntato/LODE):  
 * No longer requires an Apache HTTP server with PHP for file handling.
 * Updated [OWLAPI](https://owlcs.github.io/owlapi/) and other dependencies (fixes this [issue](https://github.com/essepuntato/LODE/issues/4)).
@@ -28,15 +41,6 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 
 ---
 
-## Table Of Contents:
-* [Example Usage](#exampleUsage)
-	* [Minimal LODE](#minimalLODE)
-	* [Complete LODE (user-interface)](#completeLODE)
-* [Installation](#information)
-* [Contact](#contact)
-
----
-
 ## Example Usage: <a name="exampleUsage"></a>
 ### Minimal LODE <a name="minimalLODE"></a>
 1. Launch application using Apache Maven:
@@ -49,8 +53,8 @@ Some improvements over the original [LODE](https://github.com/essepuntato/LODE):
 		This calls the LODE service with the parameters OWLAPI and WebVOWL selected to visualise the FOAF ontology.
 
 ### Complete LODE (web interface) <a name="completeLODE"></a>
-1. Run LODE on a Jetty server.
-	* Deployed example at: http://52.64.97.55/  
+1. Run LODE on a Tomcat server.
+	* Deployed example at: http://lode2.linked.data.gov.au/ 
 	Try one of the examples listed on the web page.
 
 ---

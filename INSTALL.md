@@ -1,5 +1,5 @@
 # Install
-The install instructions have been tested on Ubuntu 16.04 and 17.10.
+The install instructions have been tested on Ubuntu 16.04 and 17.10. See https://github.com/CSIRO-enviro-informatics/LODE/wiki for additional information on deployment steps for CSIRO server.
 
 ### Installed on an AWS EC2 server
 
@@ -34,30 +34,6 @@ Download/update dependencies and run application: `mvn clean jetty:run`. Test th
 #### Test LODE
 Try uploading some ontologies from the sampleOntologies folder or try this URL http://lexvo.org/ontology.
 
-#### Host the static content
-`sudo cp -r ~/lode/theme/static /var/www/html/`
-
-### Deploying LODE in Jetty Runner (current deployment method)
-#### Download Jetty Runner
-`mkdir ~/jetty`  
-`cd ~/jetty`  
-`wget http://central.maven.org/maven2/org/eclipse/jetty/jetty-runner/9.4.8.v20171121/jetty-runner-9.4.8.v20171121.jar`  
-`chmod 764 jetty-runner-9.4.8.v20171121.jar`  
-(ref: http://www.baeldung.com/deploy-to-jetty)
-
-#### Create WAR and deploy to Jetty Runner
-`sudo apt install screen`
-`cd ~/lode`  
-`mvn clean`  
-`mvn package`  
-`screen java -jar ~/jetty/jetty-webapp-9.4.9.v2018320.jar ~/lode/target/lode2-0.0.1-SNAPSHOT.war`.   
-Using screen allows the process to run in the background. To detatch, use `ctrl-a` followed by `d`. To resume from a new terminal, type `screen -r`. To stop jetty, inside screen use `ctrl+c`.  
-(ref: https://askubuntu.com/questions/904373/how-to-use-screen-command)
-
-Done! You should now have deployed LODE successfully!
-
-### Deploying LODE in Tomcat (Not working) (TODO)
-
 #### Install Tomcat8
 `sudo apt install -y tomcat8`  
 `sudo apt install -y tomcat8-admin`  
@@ -68,7 +44,12 @@ Add in:
 Save it.  
 Restart Tomcat. `sudo service tomcat8 restart`.
 
-#### Build WAR file
+#### Create WAR
+`cd ~/lode`  
+`mvn clean package`   
+Copy the WAR file to Tomcat's webapps directory.  
+
+#### Deploy WAR file
 `cd ~/lode/`  
 `mvn package` to create the WAR file.
 `mv ~/lode/target/"war-file-name.war" ~/lode/target/ROOT.war` - Rename the WAR file to ROOT.war.  

@@ -28,6 +28,8 @@ If not installed, install the openjdk version.
 Use `mvn -version` to check if java home is pointing to JDK and not JRE.
 
 #### Running LODE
+In `/lode/src/main/java/com/edmondchuc/lode2/ExtractOntology.java`, edit lines 128-132 with the URL of the machine. For initial testing, just point the URLs at http://localhost:8080/. 
+
 `cd ~/lode/`  
 Download/update dependencies and run application: `mvn clean jetty:run`. Test the application at http://localhost:8080/.
 
